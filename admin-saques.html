@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <title>Afiliados Bet | Saques (Admin)</title>
+  <link rel="icon" type="image/png" href="assets/afnex/images/favi.png">
+
+  <!-- Corona (paleta exata) -->
+  <link rel="stylesheet" href="assets/corona/vendors/mdi/css/materialdesignicons.min.css" />
+  <link rel="stylesheet" href="assets/corona/vendors/css/vendor.bundle.base.css" />
+  <link rel="stylesheet" href="assets/corona/css/style.css" />
+  <link rel="stylesheet" href="assets/css/igaming.css" />
+
+  <style>
+    /* Logo sem distorção */
+    .brand-logo img { height: 32px; width: auto; max-width: 180px; object-fit: contain; }
+    .brand-logo-mini img { height: 32px; width: auto; object-fit: contain; }
+
+    .action-btn { padding: .25rem .5rem; }
+
+    /* Fundo uniforme igual ao painel do Afiliado (remove “vão preto” lateral) */
+    html, body { width: 100%; overflow-x: hidden; }
+    body, .container-scroller, .page-body-wrapper, .main-panel, .content-wrapper {
+      background: #191c24 !important;
+    }
+    .main-panel { width: 100% !important; }
+    .content-wrapper { width: 100% !important; }
+
+    /* Evita “partes brancas” em inputs/plugins */
+    .form-control, .form-select, select.form-control, .input-group-text {
+      background: #2A3038 !important;
+      border-color: #2A3038 !important;
+      color: #fff !important;
+    }
+    .form-control:focus, .form-select:focus {
+      background: #2A3038 !important;
+      color: #fff !important;
+    }
+
+    /* Espaçamento entre Link de Afiliado e Modelo de Comissão */
+    .divider-soft { border-top: 1px solid rgba(255,255,255,.06); margin: 1rem 0; }
+</style>
+</head>
+<body>
+  <div class="container-scroller">
+
+    <!-- Sidebar (Corona) -->
+    <nav class="sidebar sidebar-offcanvas" id="sidebar">
+      <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
+        <a class="sidebar-brand brand-logo" href="painel-admin.html"><img src="assets/afnex/imagens/logo.png" alt="Afiliados Bet" /></a>
+        <a class="sidebar-brand brand-logo-mini" href="painel-admin.html"><img src="assets/afnex/imagens/logo.png" alt="Afiliados Bet" /></a>
+      </div>
+      <ul class="nav">
+        <li class="nav-item nav-category"><span class="nav-link">Menu</span></li>
+        <li class="nav-item menu-items">
+          <a class="nav-link" href="painel-admin.html">
+            <span class="menu-icon"><i class="mdi mdi-shield-account"></i></span>
+            <span class="menu-title">Admin</span>
+          </a>
+        </li>
+        <li class="nav-item menu-items">
+          <a class="nav-link" href="painel.html?as=affiliate&return=admin-saques.html">
+            <span class="menu-icon"><i class="mdi mdi-speedometer"></i></span>
+            <span class="menu-title">Ver como afiliado</span>
+          </a>
+        </li>
+
+        <li class="nav-item menu-items active">
+          <a class="nav-link" href="admin-saques.html">
+            <span class="menu-icon"><i class="mdi mdi-cash-multiple"></i></span>
+            <span class="menu-title">Saques</span>
+          </a>
+        </li>
+
+        <li class="nav-item menu-items">
+          <a class="nav-link" href="plataformas-admin.html">
+            <span class="menu-icon"><i class="mdi mdi-laptop"></i></span>
+            <span class="menu-title">Plataformas</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="container-fluid page-body-wrapper">
+      <!-- Navbar (Corona) -->
+      <nav class="navbar p-0 fixed-top d-flex flex-row">
+        <div class="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
+          <a class="navbar-brand brand-logo-mini" href="painel-admin.html"><img src="assets/afnex/imagens/logo.png" alt="Afiliados Bet" /></a>
+        </div>
+        <div class="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
+          <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+            <span class="mdi mdi-menu"></span>
+          </button>
+
+          <ul class="navbar-nav navbar-nav-right">
+            <li class="nav-item">
+              <a id="btnHelp" class="nav-link" href="#" target="_blank" rel="noopener noreferrer" title="Suporte">
+                <i class="mdi mdi-headset"></i>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" id="btnLogoutTop" title="Sair">
+                <i class="mdi mdi-logout text-danger"></i>
+              </a>
+            </li>
+          </ul>
+
+          <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+            <span class="mdi mdi-format-line-spacing"></span>
+          </button>
+        </div>
+      </nav>
+
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="page-header">
+            <h3 class="page-title mb-0">Saques 🏦</h3>
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="painel-admin.html">Admin</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Saques</li>
+              </ol>
+            </nav>
+          </div>
+
+          <div class="row">
+            <div class="col-12 grid-margin">
+              <div class="card">
+                <div class="card-body">
+                  <div class="d-flex flex-wrap align-items-center justify-content-between">
+                    <h4 class="card-title mb-0">Solicitações de saque</h4>
+                    <div class="d-flex" style="gap:.5rem;">
+                      <input id="filterSearch" class="form-control" placeholder="Buscar afiliado / Pix / CPF" style="max-width:320px;" />
+                      <select id="filterStatus" class="form-control" style="width:auto;min-width:180px;">
+                        <option value="">Todos</option>
+                        <option value="requested">Em análise</option>
+                        <option value="approved">Aprovado</option>
+                        <option value="paid">Pago</option>
+                        <option value="refused">Recusado</option>
+                      </select>
+                      <button id="btnReload" class="btn btn-outline-light btn-icon-text" type="button">
+                        <i class="mdi mdi-refresh"></i>Atualizar
+                      </button>
+                    </div>
+                  </div>
+
+                  
+                  <div class="row g-3 mt-2">
+                    <div class="col-12 col-md-3">
+                      <div class="card border-0" style="background:rgba(255,255,255,.06);">
+                        <div class="card-body py-3">
+                          <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                              <div class="text-muted" style="font-size:.85rem;">Em análise</div>
+                              <div id="sumRequested" style="font-size:1.35rem;font-weight:800;">0</div>
+                            </div>
+                            <i class="mdi mdi-timer-sand text-warning" style="font-size:28px;"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-md-3">
+                      <div class="card border-0" style="background:rgba(255,255,255,.06);">
+                        <div class="card-body py-3">
+                          <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                              <div class="text-muted" style="font-size:.85rem;">Aprovados</div>
+                              <div id="sumApproved" style="font-size:1.35rem;font-weight:800;">0</div>
+                            </div>
+                            <i class="mdi mdi-check-circle text-info" style="font-size:28px;"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-md-3">
+                      <div class="card border-0" style="background:rgba(255,255,255,.06);">
+                        <div class="card-body py-3">
+                          <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                              <div class="text-muted" style="font-size:.85rem;">Pagos</div>
+                              <div id="sumPaid" style="font-size:1.35rem;font-weight:800;">0</div>
+                            </div>
+                            <i class="mdi mdi-cash-check text-success" style="font-size:28px;"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-md-3">
+                      <div class="card border-0" style="background:rgba(255,255,255,.06);">
+                        <div class="card-body py-3">
+                          <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                              <div class="text-muted" style="font-size:.85rem;">Recusados</div>
+                              <div id="sumRefused" style="font-size:1.35rem;font-weight:800;">0</div>
+                            </div>
+                            <i class="mdi mdi-close-circle text-danger" style="font-size:28px;"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="table-responsive mt-3">
+                    <table id="adminPayoutTable" class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>Data</th>
+                          <th>Afiliado</th>
+                          <th>Casa</th>
+                          <th>Solicitado</th>
+                          <th>Aprovado</th>
+                          <th>Status</th>
+                          <th>Dados Pix</th>
+                          <th>Ações</th>
+                        </tr>
+                      </thead>
+                      <tbody></tbody>
+                    </table>
+                  </div>
+
+                  <div id="adminMsg" class="mt-3"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <footer class="footer">
+          <div class="d-sm-flex justify-content-center justify-content-sm-between">
+            <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Afiliados Bet • Admin</span>
+            <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">© <span id="year"></span></span>
+            <span class="text-muted d-block text-center text-sm-left d-sm-inline-block footer-credit">Criado por <a class="text-muted" href="https://www.instagram.com/eltongarcia100?igsh=MTdxcjRsMXV2ZjduaQ%3D%3D&utm_source=qr" target="_blank" rel="noopener">@eltongarcia100</a></span>
+          </div>
+        </footer>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="assets/corona/vendors/js/vendor.bundle.base.js"></script>
+  <script src="assets/corona/js/off-canvas.js"></script>
+  <script src="assets/corona/js/misc.js"></script>
+
+  <script src="assets/js/plugin/datatables/datatables.min.js"></script>
+
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  <script type="module" src="assets/js/app/adminSaques.js"></script>
+</body>
+</html>

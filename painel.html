@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <title>Afiliados Bet | Dashboard</title>
+  <link rel="icon" type="image/png" href="assets/afnex/images/favi.png">
+
+  <!-- Corona (paleta exata) -->
+  <link rel="stylesheet" href="assets/corona/vendors/mdi/css/materialdesignicons.min.css" />
+  <link rel="stylesheet" href="assets/corona/vendors/css/vendor.bundle.base.css" />
+  <link rel="stylesheet" href="assets/corona/css/style.css" />
+  <link rel="stylesheet" href="assets/css/igaming.css" />
+
+  <!-- Pequenos ajustes de marca (sem alterar paleta) -->
+  <style>
+    .brand-logo img { height: 32px; width: auto; max-width: 180px; object-fit: contain; }
+    .brand-logo-mini img { height: 32px; width: auto; object-fit: contain; }
+    .table thead th { white-space: nowrap; }
+    .badge-status { font-size: .78rem; }
+    .card .card-title { margin-bottom: .75rem; }
+    .link-input { background: #2A3038; border-color: #2A3038; color: #fff; }
+    .link-input:focus { background: #2A3038; color: #fff; }
+    .btn-icon-text i { margin-right: .4rem; }
+    /* Evita “manchas brancas” de plugins externos */
+    .dataTables_wrapper .dataTables_filter input,
+    .dataTables_wrapper .dataTables_length select {
+      background: #2A3038 !important;
+      border: 1px solid #2A3038 !important;
+      color: #fff !important;
+    }
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+      color: #fff !important;
+    }
+
+    /* DataTables: PT-BR + look Corona (evita botões claros) */
+    .dataTables_wrapper .dataTables_info,
+    .dataTables_wrapper .dataTables_length label,
+    .dataTables_wrapper .dataTables_filter label {
+      color: #6c7293 !important;
+      font-size: .9rem;
+    }
+    .dataTables_wrapper .dataTables_paginate {
+      margin-top: .75rem;
+    }
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+      background: transparent !important;
+      border: 1px solid rgba(108, 114, 147, .35) !important;
+      border-radius: .35rem !important;
+      padding: .35rem .6rem !important;
+      margin: 0 .15rem !important;
+      font-weight: 600;
+      font-family: inherit;
+    }
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+      background: rgba(0, 210, 91, .15) !important;
+      border-color: rgba(0, 210, 91, .55) !important;
+      color: #fff !important;
+    }
+    .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+      background: rgba(255, 171, 0, .12) !important;
+      border-color: rgba(255, 171, 0, .55) !important;
+      color: #fff !important;
+    }
+
+    /* Comissões: destaque com a paleta do Corona (sem “branco estranho”) */
+    .card--commission {
+      background: linear-gradient(180deg, rgba(0, 210, 91, .10) 0%, rgba(25, 28, 36, 0) 55%) !important;
+      border: 1px solid rgba(0, 210, 91, .18) !important;
+    }
+    .card--commission .badge-outline-light {
+      border-color: rgba(108,114,147,.45) !important;
+      color: #c9c9d6 !important;
+    }
+
+    /* KPI cards (Comissões): ícone à esquerda + alinhamento consistente */
+    .ab-metric{ gap: .85rem; }
+    .ab-metric-icon{
+      width: 46px;
+      height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: .65rem;
+      background: rgba(255,255,255,.04);
+      flex: 0 0 46px;
+    }
+    .ab-metric-icon i{ font-size: 1.85rem; }
+    .ab-metric-text .text-muted{ line-height: 1.05; }
+
+    /* Destaque para CPA + Baseline */
+    .badge-kpi{ font-weight: 700; }
+    .badge-kpi--cpa{
+      background: rgba(0, 210, 91, .16) !important;
+      border: 1px solid rgba(0, 210, 91, .45) !important;
+      color: #fff !important;
+    }
+    .badge-kpi--baseline{
+      background: rgba(255, 171, 0, .14) !important;
+      border: 1px solid rgba(255, 171, 0, .45) !important;
+      color: #fff !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="container-scroller">
+
+    <!-- SIDEBAR (igual ao template, com toggle) -->
+    <nav class="sidebar sidebar-offcanvas" id="sidebar">
+      <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
+        <a class="sidebar-brand brand-logo" href="painel.html">
+          <img src="assets/afnex/imagens/logo.png" alt="Afiliados Bet" />
+        </a>
+        <a class="sidebar-brand brand-logo-mini" href="painel.html">
+          <img src="assets/afnex/imagens/logo.png" alt="Afiliados Bet" />
+        </a>
+      </div>
+      <ul class="nav">
+        <li class="nav-item profile">
+          <div class="profile-desc">
+            <div class="profile-pic">
+              <div class="count-indicator">
+                <div class="img-xs rounded-circle d-flex align-items-center justify-content-center" style="background:#111111;color:#fff;font-weight:700;" id="avatarTop">--</div>
+                <span class="count bg-success"></span>
+              </div>
+              <div class="profile-name">
+                <h5 class="mb-0 font-weight-normal" id="topbarNome">Afiliado</h5>
+                <span id="roleBadge">AFILIADO</span>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="nav-item nav-category">
+          <span class="nav-link">Menu</span>
+        </li>
+        <li class="nav-item menu-items active">
+          <a class="nav-link" href="painel.html">
+            <span class="menu-icon"><i class="mdi mdi-speedometer"></i></span>
+            <span class="menu-title">Dashboard</span>
+          </a>
+        </li>
+        <li class="nav-item menu-items" id="navPlataformas">
+          <a class="nav-link" href="plataformas.html">
+            <span class="menu-icon"><i class="mdi mdi-laptop"></i></span>
+            <span class="menu-title">Plataformas</span>
+          </a>
+        </li>
+
+
+        <li class="nav-item menu-items" id="navSaque">
+          <a class="nav-link" href="saque.html">
+            <span class="menu-icon"><i class="mdi mdi-cash-multiple"></i></span>
+            <span class="menu-title">Saque</span>
+          </a>
+        </li>
+
+        <!-- Owner only (mostra quando estiver em modo afiliado) -->
+        <li class="nav-item menu-items" id="navBackToAdmin" style="display:none;">
+          <a class="nav-link" href="painel-admin.html">
+            <span class="menu-icon"><i class="mdi mdi-shield-account"></i></span>
+            <span class="menu-title">Voltar ao Admin</span>
+          </a>
+        </li>
+
+      </ul>
+    </nav>
+
+    <!-- MAIN -->
+    <div class="container-fluid page-body-wrapper">
+
+      <!-- TOP NAV (toggle + perfil) -->
+      <nav class="navbar p-0 fixed-top d-flex flex-row">
+        <div class="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
+          <a class="navbar-brand brand-logo-mini" href="painel.html"><img src="assets/afnex/imagens/logo.png" alt="Afiliados Bet" /></a>
+        </div>
+        <div class="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
+          <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+            <span class="mdi mdi-menu"></span>
+          </button>
+
+          <ul class="navbar-nav navbar-nav-right">
+            <li class="nav-item">
+              <a id="btnHelp" class="nav-link" href="#" target="_blank" rel="noopener noreferrer" title="Suporte">
+                <i class="mdi mdi-headset"></i>
+              </a>
+            </li>
+
+            <li class="nav-item dropdown">
+              <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
+                <div class="navbar-profile">
+                  <div class="img-xs rounded-circle d-flex align-items-center justify-content-center" style="background:#111111;color:#fff;font-weight:700;" id="avatarDrop">--</div>
+                  <p class="mb-0 d-none d-sm-block navbar-profile-name" id="dropNome">Afiliado</p>
+                  <i class="mdi mdi-menu-down d-none d-sm-block"></i>
+                </div>
+              </a>
+              <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="profileDropdown">
+                <h6 class="p-3 mb-0">Conta</h6>
+                <div class="dropdown-divider"></div>
+                <div class="px-3 pb-2 text-muted" style="font-size:.85rem;" id="dropEmail">email@exemplo.com</div>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item preview-item" href="#" id="btnLogoutTop">
+                  <div class="preview-thumbnail">
+                    <div class="preview-icon bg-dark rounded-circle">
+                      <i class="mdi mdi-logout text-danger"></i>
+                    </div>
+                  </div>
+                  <div class="preview-item-content">
+                    <p class="preview-subject mb-1">Sair</p>
+                  </div>
+                </a>
+              </div>
+            </li>
+          </ul>
+          <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+            <span class="mdi mdi-format-line-spacing"></span>
+          </button>
+        </div>
+      </nav>
+
+      <div class="main-panel">
+        <div class="content-wrapper">
+
+          <!-- Linha 1: Comissões -->
+          <div class="row">
+            <div class="col-12 grid-margin">
+              <div class="card card--commission">
+                <div class="card-body">
+                  <div class="d-flex flex-wrap align-items-center justify-content-between">
+                    <h4 class="card-title mb-0">Comissões</h4>
+                    <div class="d-flex flex-wrap" style="gap:.5rem;">
+                      <div class="input-group input-group-sm" style="max-width:320px;"><span class="input-group-text"><i class="mdi mdi-home-variant"></i></span><select class="form-select" id="dashHouseSelect"><option value="">Carregando casas...</option></select></div>
+                      <span class="badge badge-kpi badge-kpi--cpa" id="badgeCPA">CPA: -</span>
+                      <span class="badge badge-kpi badge-kpi--baseline" id="badgeBaseline">Baseline: -</span>
+                    </div>
+                  </div>
+
+                  <div class="row mt-4">
+                    <div class="col-md-3 mb-3 mb-md-0">
+                      <div class="ab-metric d-flex align-items-center">
+                        <div class="ab-metric-icon"><i class="mdi mdi-cash-multiple text-success"></i></div>
+                        <div class="ab-metric-text">
+                          <div class="text-muted">Disponível</div>
+                          <div class="h4 mb-0" id="cAvailable">R$ 0,00</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-3 mb-3 mb-md-0">
+                      <div class="ab-metric d-flex align-items-center">
+                        <div class="ab-metric-icon"><i class="mdi mdi-clock-outline text-warning"></i></div>
+                        <div class="ab-metric-text">
+                          <div class="text-muted">Solicitado</div>
+                          <div class="h4 mb-0" id="cRequested">R$ 0,00</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-3 mb-3 mb-md-0">
+                      <div class="ab-metric d-flex align-items-center">
+                        <div class="ab-metric-icon"><i class="mdi mdi-check-decagram text-success"></i></div>
+                        <div class="ab-metric-text">
+                          <div class="text-muted">Pago</div>
+                          <div class="h4 mb-0" id="cPaid">R$ 0,00</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="ab-metric d-flex align-items-center">
+                        <div class="ab-metric-icon"><i class="mdi mdi-close-octagon text-danger"></i></div>
+                        <div class="ab-metric-text">
+                          <div class="text-muted">Recusado</div>
+                          <div class="h4 mb-0" id="cRefused">R$ 0,00</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row mt-4">
+                    <div class="col-lg-8">
+                      <label class="text-muted">Seu link</label>
+                      <div class="input-group">
+                        <input id="affiliateLink" type="text" class="form-control link-input" placeholder="Seu link ainda não foi configurado" readonly />
+                        <div class="input-group-append">
+                          <button id="btnCopyLink" class="btn btn-primary btn-icon-text" type="button"><i class="mdi mdi-content-copy"></i>Copiar</button>
+                        </div>
+                      </div>
+                      <small class="text-muted" id="affiliateLinkHint"></small>
+
+                      <!-- Casas (múltiplas) -->
+                      <div id="housesList" class="mt-3" style="display:none"></div>
+                    </div>
+                    <div class="col-lg-4 mt-3 mt-lg-0 d-flex align-items-end justify-content-lg-end">
+                      <button id="btnLogout" class="btn btn-outline-danger btn-icon-text" type="button">
+                        <i class="mdi mdi-logout"></i>Sair
+                      </button>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Linha 2: Métricas do mês -->
+          <div class="row">
+            <div class="col-12 grid-margin">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Métricas do mês</h4>
+                  <div id="dashboardHouseTitle" class="text-muted" style="margin-top:-4px"></div>
+                  <div class="row">
+                    <div class="col-md-3 mb-3"><div class="d-flex justify-content-between"><span class="text-muted">Cadastros</span><span class="font-weight-bold" id="mSignups">0</span></div></div>
+                    <div class="col-md-3 mb-3"><div class="d-flex justify-content-between"><span class="text-muted">FTDs</span><span class="font-weight-bold" id="mFTDs">0</span></div></div>
+                    <div class="col-md-3 mb-3"><div class="d-flex justify-content-between"><span class="text-muted">Valor FTD</span><span class="font-weight-bold" id="mFTDAmount">R$ 0,00</span></div></div>
+                    <div class="col-md-3 mb-3"><div class="d-flex justify-content-between"><span class="text-muted">QFTDs (CPA)</span><span class="font-weight-bold" id="mQFTDs">0</span></div></div>
+                    <div class="col-md-3 mb-3"><div class="d-flex justify-content-between"><span class="text-muted">CPA</span><span class="font-weight-bold" id="mCPA">R$ 0,00</span></div></div>
+                    <div class="col-md-3 mb-3"><div class="d-flex justify-content-between"><span class="text-muted">Depósitos</span><span class="font-weight-bold" id="mDeposits">R$ 0,00</span></div></div>
+                    <div class="col-md-3 mb-3"><div class="d-flex justify-content-between"><span class="text-muted">RevShare</span><span class="font-weight-bold" id="mRevShare">R$ 0,00</span></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Linha 3: Área chart (comparação mensal) -->
+          <div class="row">
+            <div class="col-12 grid-margin">
+              <div class="card">
+                <div class="card-body">
+                  <div class="d-flex flex-wrap align-items-center justify-content-between">
+                    <h4 class="card-title mb-0">Comparação mensal (Área)</h4>
+                    <div class="text-muted" style="font-size:.85rem;">Mês atual vs mês passado</div>
+                  </div>
+                  <div style="height: 280px;" class="mt-3">
+                    <canvas id="monthlyChart"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Linha 4: Tabelas -->
+          <div class="row">
+            <div class="col-lg-7 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Detalhamento diário (mês atual)</h4>
+                  <div class="table-responsive">
+                    <table id="detailsTable" class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>Dia</th>
+                          <th>Cadastros</th>
+                          <th>FTDs</th>
+                          <th>Valor FTD</th>
+                          <th>QFTDs</th>
+                          <th>CPA</th>
+                          <th>Depósitos</th>
+                          <th>RevShare</th>
+                        </tr>
+                      </thead>
+                      <tbody></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-5 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Pagamentos</h4>
+                  <div class="table-responsive">
+                    <table id="payoutTable" class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>Data</th>
+                          <th>Valor</th>
+                          <th>Método</th>
+                          <th>Status</th>
+                          <th>Processado</th>
+                        </tr>
+                      </thead>
+                      <tbody></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <footer class="footer">
+          <div class="d-sm-flex justify-content-center justify-content-sm-between">
+            <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Afiliados Bet</span>
+            <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">© <span id="year"></span></span>
+            <span class="text-muted d-block text-center text-sm-left d-sm-inline-block footer-credit">Criado por <a class="text-muted" href="https://www.instagram.com/eltongarcia100?igsh=MTdxcjRsMXV2ZjduaQ%3D%3D&utm_source=qr" target="_blank" rel="noopener">@eltongarcia100</a></span>
+          </div>
+        </footer>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Corona JS -->
+  <script src="assets/corona/vendors/js/vendor.bundle.base.js"></script>
+  <script src="assets/corona/vendors/chart.js/Chart.min.js"></script>
+  <script src="assets/corona/js/off-canvas.js"></script>
+  <script src="assets/corona/js/misc.js"></script>
+  <script src="assets/js/plugin/datatables/datatables.min.js"></script>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+  <script type="module" src="assets/js/app/painel.js"></script>
+</body>
+</html>

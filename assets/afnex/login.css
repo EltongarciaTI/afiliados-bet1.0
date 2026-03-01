@@ -1,0 +1,154 @@
+/* Login Styles */
+.login-container {
+    position: fixed;
+    inset: 0;
+    min-height: 100vh;
+    height: 100vh;
+    width: 100%;
+    background-color: var(--cor-preto);
+    background-image: url("images/fundocadastro.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 1;
+}
+
+.login-box {
+    background-color: var(--cor-preto);
+    border-radius: 12px;
+    padding: 3rem;
+    width: 100%;
+    max-width: 450px;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    border: none;
+    box-sizing: border-box;
+}
+
+.login-logo {
+    text-align: center;
+    margin: 0 0 1.5rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-logo .logo-img {
+    height: 60px;
+    width: auto;
+    object-fit: contain;
+}
+
+.login-form {
+    margin-bottom: 0;
+}
+
+.login-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.login-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--cor-branco);
+    font-size: 0.9rem;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 0.9rem;
+    border: 1px solid #666;
+    border-radius: 8px;
+    font-size: 16px !important; /* evita zoom automático no iOS ao focar */
+    background-color: #1a1a1a;
+    color: var(--cor-branco);
+    transition: border-color 0.3s;
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+}
+
+.login-form input:focus {
+    outline: none;
+    border-color: var(--cor-branco);
+}
+
+.login-form input::placeholder {
+    color: #999;
+}
+
+.password-input-wrapper {
+    position: relative;
+}
+
+.password-input-wrapper input {
+    padding-right: 45px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+    transition: color 0.3s;
+}
+
+.toggle-password:hover {
+    color: var(--cor-branco);
+}
+
+.toggle-password svg {
+    width: 20px;
+    height: 20px;
+}
+
+.btn-login-submit {
+    width: 100%;
+    padding: 0.9rem;
+    background-color: var(--cor-branco);
+    color: var(--cor-preto);
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.3s;
+    font-family: 'Poppins', sans-serif;
+}
+
+.btn-login-submit:hover {
+    opacity: 0.9;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .login-container {
+        background-image: url("images/fundocell.png");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-box {
+        padding: 2rem 1.5rem;
+    }
+
+    .login-title {
+        font-size: 1.3rem;
+    }
+}

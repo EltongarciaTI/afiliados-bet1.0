@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <title>Afiliados Bet | Admin</title>
+  <link rel="icon" type="image/png" href="assets/afnex/images/favi.png">
+
+  <!-- Corona (paleta exata) -->
+  <link rel="stylesheet" href="assets/corona/vendors/mdi/css/materialdesignicons.min.css" />
+  <link rel="stylesheet" href="assets/corona/vendors/css/vendor.bundle.base.css" />
+  <link rel="stylesheet" href="assets/corona/css/style.css" />
+  <link rel="stylesheet" href="assets/css/igaming.css" />
+
+  <style>
+    /* Logo sem distorção */
+    .brand-logo img { height: 32px; width: auto; max-width: 180px; object-fit: contain; }
+    .brand-logo-mini img { height: 32px; width: auto; object-fit: contain; }
+
+    .action-btn { padding: .25rem .5rem; }
+
+    /* Fundo uniforme igual ao painel do Afiliado (remove “vão preto” lateral) */
+    html, body { width: 100%; overflow-x: hidden; }
+    body, .container-scroller, .page-body-wrapper, .main-panel, .content-wrapper {
+      background: #191c24 !important;
+    }
+    .main-panel { width: 100% !important; }
+    .content-wrapper { width: 100% !important; }
+
+    /* Admin mais "full width" em monitores grandes */
+    .content-wrapper { padding-left: .75rem !important; padding-right: .75rem !important; }
+    .page-body-wrapper { padding-left: 0 !important; }
+
+    /* Evita “partes brancas” em inputs/plugins */
+    .form-control, .form-select, select.form-control, .input-group-text {
+      background: #2A3038 !important;
+      border-color: #2A3038 !important;
+      color: #fff !important;
+    }
+    .form-control:focus, .form-select:focus {
+      background: #2A3038 !important;
+      color: #fff !important;
+    }
+
+    /* Espaçamento entre Link de Afiliado e Modelo de Comissão */
+    .divider-soft { border-top: 1px solid rgba(255,255,255,.06); margin: 1rem 0; }
+</style>
+</head>
+<body>
+  <div class="container-scroller">
+
+    <!-- Sidebar (Corona) -->
+    <nav class="sidebar sidebar-offcanvas" id="sidebar">
+      <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
+        <a class="sidebar-brand brand-logo" href="painel-admin.html"><img src="assets/afnex/imagens/logo.png" alt="Afiliados Bet" /></a>
+        <a class="sidebar-brand brand-logo-mini" href="painel-admin.html"><img src="assets/afnex/imagens/logo.png" alt="Afiliados Bet" /></a>
+      </div>
+      <ul class="nav">
+        <li class="nav-item nav-category"><span class="nav-link">Menu</span></li>
+        <li class="nav-item menu-items active">
+          <a class="nav-link" href="painel-admin.html">
+            <span class="menu-icon"><i class="mdi mdi-shield-account"></i></span>
+            <span class="menu-title">Admin</span>
+          </a>
+        </li>
+        <li class="nav-item menu-items">
+          <a class="nav-link" href="painel.html?as=affiliate&return=painel-admin.html">
+            <span class="menu-icon"><i class="mdi mdi-speedometer"></i></span>
+            <span class="menu-title">Ver como afiliado</span>
+          </a>
+        </li>
+
+        <li class="nav-item menu-items">
+          <a class="nav-link" href="admin-saques.html">
+            <span class="menu-icon"><i class="mdi mdi-cash-multiple"></i></span>
+            <span class="menu-title">Saques</span>
+          </a>
+        </li>
+
+        <li class="nav-item menu-items">
+          <a class="nav-link" href="plataformas-admin.html">
+            <span class="menu-icon"><i class="mdi mdi-laptop"></i></span>
+            <span class="menu-title">Plataformas</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="container-fluid page-body-wrapper">
+      <!-- Navbar (Corona) -->
+      <nav class="navbar p-0 fixed-top d-flex flex-row">
+        <div class="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
+          <a class="navbar-brand brand-logo-mini" href="painel-admin.html"><img src="assets/afnex/imagens/logo.png" alt="Afiliados Bet" /></a>
+        </div>
+        <div class="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
+          <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+            <span class="mdi mdi-menu"></span>
+          </button>
+
+          <ul class="navbar-nav navbar-nav-right">
+            <li class="nav-item">
+              <a id="btnHelp" class="nav-link" href="#" target="_blank" rel="noopener noreferrer" title="Suporte">
+                <i class="mdi mdi-headset"></i>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" id="btnLogoutTop" title="Sair">
+                <i class="mdi mdi-logout text-danger"></i>
+              </a>
+            </li>
+          </ul>
+
+          <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+            <span class="mdi mdi-format-line-spacing"></span>
+          </button>
+        </div>
+      </nav>
+
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="page-header">
+            <h3 class="page-title mb-0">Admin 🛠️</h3>
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="#">Afiliados Bet</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Gestão</li>
+              </ol>
+            </nav>
+          </div>
+
+          <!-- Overview (iGaming / SaaS) -->
+          <div class="row g-3 mb-4" id="adminOverviewRow">
+            <div class="col-12 col-md-6 col-xl-3">
+              <div class="card ab-kpi">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                  <div>
+                    <div class="text-muted small">Afiliados</div>
+                    <div class="ab-kpi-value" id="kpiTotalAffiliates">0</div>
+                  </div>
+                  <div class="ab-kpi-icon"><i class="mdi mdi-account-multiple"></i></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-6 col-xl-3">
+              <div class="card ab-kpi ab-kpi--warn">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                  <div>
+                    <div class="text-muted small">Aprovações pendentes</div>
+                    <div class="ab-kpi-value" id="kpiPendingApprovals">0</div>
+                  </div>
+                  <div class="ab-kpi-icon"><i class="mdi mdi-account-clock"></i></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-6 col-xl-3">
+              <div class="card ab-kpi ab-kpi--info">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                  <div>
+                    <div class="text-muted small">Solicitações de plataforma</div>
+                    <div class="ab-kpi-value" id="kpiPendingPlatformRequests">0</div>
+                  </div>
+                  <div class="ab-kpi-icon"><i class="mdi mdi-laptop"></i></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-6 col-xl-3">
+              <div class="card ab-kpi ab-kpi--success">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                  <div>
+                    <div class="text-muted small">Saques pendentes</div>
+                    <div class="ab-kpi-value" id="kpiPendingPayouts">0</div>
+                  </div>
+                  <div class="ab-kpi-icon"><i class="mdi mdi-cash-clock"></i></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+<div class="row mb-4">
+  <!-- Aprovações (novos cadastros) -->
+  <div class="col-12 mb-4">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title mb-0">Aprovação de Afiliados</div>
+        <div class="card-category">Cadastros pendentes • aprove ou recuse</div>
+      </div>
+      <div class="card-body">
+        <div class="row g-2 align-items-center mb-3">
+  <div class="col-md-6">
+            <div class="input-group">
+      <span class="input-group-text"><i class="mdi mdi-magnify"></i></span>
+	      <input type="text" class="form-control" id="approvalSearch" placeholder="Buscar por nome, e-mail ou Instagram...">
+    </div>
+  </div>
+  <div class="col-md-6 text-md-end">
+    <span class="text-muted small" id="approvalCount"></span>
+  </div>
+</div>
+<div class="table-responsive">
+          <table class="table table-striped table-hover align-middle" id="approvalTable">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>WhatsApp</th>
+                <th>Instagram</th>
+                <th>Cadastro</th>
+                <th style="width:220px">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="6" class="text-muted">Carregando...</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="small text-muted" id="approvalHint" style="display:none;"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+	        <div class="row g-3 align-items-end">
+	          <div class="col-lg-6">
+	            <label class="form-label fw-semibold">Selecionar Afiliado 👤</label>
+	            <div class="input-group mb-2">
+	              <span class="input-group-text"><i class="mdi mdi-magnify"></i></span>
+	              <input class="form-control" id="affiliateSearch" placeholder="Pesquisar afiliado (nome ou e-mail)..." />
+	            </div>
+	            <div class="input-group">
+	              <span class="input-group-text"><i class="mdi mdi-account"></i></span>
+	              <select class="form-select" id="affiliateSelect">
+	                <option value="">Carregando...</option>
+	              </select>
+	            </div>
+            <div class="mt-3" id="affiliateInfoCard"></div>
+            <div class="mt-3" id="affiliateHousesCard"></div>
+            <div class="small text-muted mt-2" id="affiliateMeta" style="display:none;"></div>
+            <div class="d-flex gap-2 flex-wrap mt-2">
+              <button class="btn btn-outline-warning btn-sm" id="btnReopenSelected" type="button"><i class="mdi mdi-refresh"></i> Reabrir</button>
+              <button class="btn btn-outline-danger btn-sm" id="btnRemoveSelected" type="button"><i class="mdi mdi-trash-can-outline"></i> Remover</button>
+            </div>
+          </div>
+
+          <div class="col-lg-6 d-flex gap-2 flex-wrap justify-content-lg-end">
+          <button class="btn btn-primary" id="btnOpenAdd">
+            <i class="mdi mdi-plus"></i> Adicionar Dia
+          </button>
+          <button class="btn btn-outline-primary" id="btnOpenSet">
+            <i class="mdi mdi-pencil"></i> Editar Dia
+          </button>
+          <button class="btn btn-outline-primary" id="btnRefresh">
+            <i class="mdi mdi-refresh"></i> Atualizar
+          </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Configurações do afiliado -->
+<div class="row mb-4">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title mb-0">Casas do Afiliado (múltiplas) 🏠</div>
+        <div class="card-category">Adicione quantas casas quiser • cada casa é independente</div>
+      </div>
+      <div class="card-body">
+        <div class="alert alert-info mb-3" id="houseRequestsBox" style="display:none;"></div>
+
+        <div class="ab-houses-toolbar mb-3">
+          <div class="ab-houses-left">
+            <div class="input-group">
+              <span class="input-group-text"><i class="mdi mdi-magnify"></i></span>
+              <input class="form-control" id="housesSearch" placeholder="Buscar casa, link ou modelo..." />
+            </div>
+            <div class="form-check form-switch ms-2">
+              <input class="form-check-input" type="checkbox" id="housesShowInactive">
+              <label class="form-check-label small" for="housesShowInactive">Mostrar inativas</label>
+            </div>
+          </div>
+          <div class="ab-houses-right">
+            <div class="ab-houses-totals" id="housesTotals"></div>
+            <button class="btn btn-outline-primary" type="button" id="btnNewHouse">
+              <i class="mdi mdi-plus"></i> Nova casa
+            </button>
+          </div>
+        </div>
+    
+
+        <div class="table-responsive mb-3">
+          <table class="table table-striped table-hover align-middle" id="housesTable">
+            <thead>
+              <tr>
+                <th>Casa</th>
+                <th>Modelo</th>
+                <th>Comissão</th>
+                <th>Links</th>
+                <th>Métricas (totais)</th>
+                <th style="width:180px">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="housesTableBody">
+              <tr><td colspan="6" class="text-muted">Selecione um afiliado para carregar as casas.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        
+        <div class="ab-house-editor">
+          <button class="ab-house-editor-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#houseEditorCollapse" aria-expanded="true" aria-controls="houseEditorCollapse">
+            <span><i class="mdi mdi-home-edit"></i> Editor de casa</span>
+            <span class="ab-house-editor-hint">Criar/editar • saldos e métricas</span>
+            <i class="mdi mdi-chevron-down"></i>
+          </button>
+          <div class="collapse show" id="houseEditorCollapse">
+        <form id="houseForm" class="row g-3">
+          <input type="hidden" id="house_id" />
+
+          <div class="col-md-4">
+            <label class="form-label">Nome da casa</label>
+            <input class="form-control" id="house_name" placeholder="Ex: BetX" />
+          </div>
+          <div class="col-md-8">
+            <label class="form-label">Link da casa</label>
+            <input class="form-control" id="house_link" placeholder="https://..." />
+          </div>
+
+          <div class="col-md-12">
+            <label class="form-label">Link do afiliado (dessa casa)</label>
+            <input class="form-control" id="affiliate_link" placeholder="https://..." />
+          </div>
+
+          <div class="col-12"><hr class="my-2 opacity-25" /></div>
+
+          <div class="col-md-4">
+            <label class="form-label">Modelo de comissão</label>
+            <select class="form-select" id="house_model">
+              <option value="cpa">CPA</option>
+              <option value="rev">RevShare</option>
+              <option value="hibrido">Híbrido</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Baseline</label>
+            <input class="form-control" id="house_baseline" type="number" step="0.01" placeholder="0" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">CPA</label>
+            <input class="form-control" id="house_cpa" type="number" step="0.01" placeholder="0" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">REV (%)</label>
+            <input class="form-control" id="house_rev" type="number" step="0.01" placeholder="0" />
+          </div>
+
+          <div class="col-12"><hr class="my-2 opacity-25" /></div>
+
+          <div class="col-md-3">
+            <label class="form-label">Saldo disponível</label>
+            <input class="form-control" id="h_commission_available" type="number" step="0.01" placeholder="0" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Solicitado</label>
+            <input class="form-control" id="h_commission_requested" type="number" step="0.01" placeholder="0" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Pago</label>
+            <input class="form-control" id="h_commission_paid" type="number" step="0.01" placeholder="0" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Recusado</label>
+            <input class="form-control" id="h_commission_refused" type="number" step="0.01" placeholder="0" />
+          </div>
+
+          <div class="col-12"><hr class="my-2 opacity-25" /></div>
+
+          <div class="col-md-2">
+            <label class="form-label">Cadastros</label>
+            <input class="form-control" id="h_signups" type="number" step="1" placeholder="0" />
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">FTDs</label>
+            <input class="form-control" id="h_ftds" type="number" step="1" placeholder="0" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Depósitos (R$)</label>
+            <input class="form-control" id="h_deposits" type="number" step="0.01" placeholder="0" />
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">CPA (R$)</label>
+            <input class="form-control" id="h_cpa_amount" type="number" step="0.01" placeholder="0" />
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">RevShare (R$)</label>
+            <input class="form-control" id="h_rev_amount" type="number" step="0.01" placeholder="0" />
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-check mt-4">
+              <input class="form-check-input" type="checkbox" id="h_active" checked>
+              <label class="form-check-label" for="h_active">Ativa</label>
+            </div>
+          </div>
+
+          <div class="col-12 d-flex gap-2">
+            <button class="btn btn-primary" type="submit" id="btnSaveHouse">
+              <i class="mdi mdi-content-save"></i> Salvar casa
+            </button>
+            <button class="btn btn-outline-secondary" type="button" id="btnClearHouse">
+              Limpar
+            </button>
+            <div class="text-muted small align-self-center" id="housesStatus"></div>
+          </div>
+        </form>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Configuração única (LEGADO) -->
+<div class="row mb-4" style="display:none">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title mb-0">Configuração única (legado)</div>
+        <div class="card-category">Não use — agora o sistema suporta múltiplas casas</div>
+      </div>
+      <div class="card-body">
+        <form id="affiliateConfigForm" class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label">Casa</label>
+            <input class="form-control" id="casa_nome" placeholder="Ex: CasaX" />
+          </div>
+          <div class="col-md-8">
+            <label class="form-label">Link da Casa</label>
+            <input class="form-control" id="casa_link" placeholder="https://..." />
+          </div>
+          <div class="col-md-12">
+            <label class="form-label">Link do Afiliado</label>
+            <input class="form-control" id="link_marcha" placeholder="https://..." />
+          </div>
+          <div class="col-12"><hr class="my-2 opacity-25" /></div>
+          <div class="col-md-4">
+            <label class="form-label">Modelo de Comissão</label>
+            <select class="form-select" id="comissao_modelo">
+              <option value="">Selecione</option>
+              <option value="cpa">CPA</option>
+              <option value="rev">REV</option>
+              <option value="hibrido">Híbrido</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Baseline</label>
+            <input class="form-control" id="baseline" type="number" step="0.01" placeholder="0" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">CPA</label>
+            <input class="form-control" id="cpa" type="number" step="0.01" placeholder="0" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">REV</label>
+            <input class="form-control" id="rev" type="number" step="0.01" placeholder="0" />
+          </div>
+          <div class="col-12 d-flex gap-2">
+            <button class="btn btn-primary" type="submit" id="btnSaveConfig">
+              <i class="mdi mdi-content-save"></i> Salvar Configurações
+            </button>
+            <div class="text-muted small align-self-center" id="configStatus"></div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Comissões (o OWNER ajusta manualmente) -->
+<div class="row mb-4">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title mb-0">Comissões</div>
+        <div class="card-category">Valores exibidos no painel do afiliado</div>
+      </div>
+      <div class="card-body">
+        <form id="commissionForm" class="row g-3">
+          <div class="col-md-3">
+            <label class="form-label">Comissão Disponível</label>
+            <input class="form-control" id="commission_available" type="number" step="0.01" placeholder="0" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Comissão Solicitada</label>
+            <input class="form-control" id="commission_requested" type="number" step="0.01" placeholder="0" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Comissão Paga</label>
+            <input class="form-control" id="commission_paid" type="number" step="0.01" placeholder="0" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Comissão Recusada</label>
+            <input class="form-control" id="commission_refused" type="number" step="0.01" placeholder="0" />
+          </div>
+
+          <div class="col-12 d-flex gap-2">
+            <button class="btn btn-primary" type="submit" id="btnSaveCommissions">
+              <i class="mdi mdi-content-save"></i> Salvar Comissões
+            </button>
+            <div class="text-muted small align-self-center" id="commissionStatus"></div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+<div class="col-12">
+<div class="card">
+<div class="card-header d-flex align-items-center justify-content-between">
+<div>
+<div class="card-title mb-0">Métricas diárias</div>
+<div class="card-category">Mês atual</div>
+</div>
+</div>
+<div class="card-body">
+<div class="table-responsive">
+<table class="display table table-striped table-hover" id="adminStatsTable">
+<thead>
+<tr>
+<th>Dia</th>
+<th>Cadastros</th>
+<th>FTDs</th>
+<th>Valor FTD</th>
+<th>QFTDs (CPA)</th>
+<th>CPA</th>
+<th>Depósitos</th>
+<th>RevShare</th>
+<th>Ações</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+<!-- Modal -->
+<div aria-hidden="true" class="modal fade" id="editModal" tabindex="-1">
+<div class="modal-dialog modal-lg modal-dialog-centered">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="editModalTitle">Métricas do Dia</h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+  <span aria-hidden="true">&times;</span>
+</button>
+</div>
+<form id="editForm">
+<div class="modal-body">
+<div class="row g-3">
+<div class="col-12">
+  <div class="border rounded p-2">
+    <div class="fw-semibold mb-1">Modo</div>
+    <div class="d-flex flex-wrap gap-3">
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="metricMode" id="modeAdd" value="add" checked>
+        <label class="form-check-label" for="modeAdd">Adicionar</label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="metricMode" id="modeSet" value="set">
+        <label class="form-check-label" for="modeSet">Editar</label>
+      </div>
+    </div>
+    
+  </div>
+</div>
+<div class="col-md-4">
+<label class="form-label">Dia</label>
+<input class="form-control" id="day" required="" type="date"/>
+</div>
+<div class="col-md-4">
+<label class="form-label">Cadastros</label>
+<input class="form-control" id="signups" min="0" type="number" value="0"/>
+</div>
+<div class="col-md-4">
+<label class="form-label">FTDs</label>
+<input class="form-control" id="ftds" min="0" type="number" value="0"/>
+</div>
+<div class="col-md-4">
+<label class="form-label">Valor FTD</label>
+<input class="form-control" id="ftd_amount" min="0" step="0.01" type="number" value="0"/>
+</div>
+<div class="col-md-4">
+<label class="form-label">QFTDs (CPA)</label>
+<input class="form-control" id="qftds_cpa" min="0" type="number" value="0"/>
+</div>
+<div class="col-md-4">
+<label class="form-label">CPA</label>
+<input class="form-control" id="cpa_amount" min="0" step="0.01" type="number" value="0"/>
+</div>
+<div class="col-md-6">
+<label class="form-label">Depósitos</label>
+<input class="form-control" id="deposits_amount" min="0" step="0.01" type="number" value="0"/>
+</div>
+<div class="col-md-6">
+<label class="form-label">RevShare</label>
+<input class="form-control" id="revshare_amount" min="0" step="0.01" type="number" value="0"/>
+</div>
+</div>
+<div class="alert alert-warning mt-3 mb-0 small">
+            Esses números aparecem no painel do afiliado. Use com atenção.
+          </div>
+</div>
+<div class="modal-footer">
+<button class="btn btn-outline-secondary" data-dismiss="modal" type="button">Cancelar</button>
+<button class="btn btn-primary" id="btnSave" type="submit">
+<i class="mdi mdi-content-save"></i> Salvar
+          </button>
+</div>
+</form>
+</div>
+</div>
+</div>
+</div>
+</div>
+        </div>
+
+        <footer class="footer">
+          <div class="d-sm-flex justify-content-center justify-content-sm-between">
+            <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Afiliados Bet • Admin</span>
+            <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">© <span id="year"></span></span>
+            <span class="text-muted d-block text-center text-sm-left d-sm-inline-block footer-credit">Criado por <a class="text-muted" href="https://www.instagram.com/eltongarcia100?igsh=MTdxcjRsMXV2ZjduaQ%3D%3D&utm_source=qr" target="_blank" rel="noopener">@eltongarcia100</a></span>
+          </div>
+        </footer>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="assets/corona/vendors/js/vendor.bundle.base.js"></script>
+  <script src="assets/corona/vendors/chart.js/Chart.min.js"></script>
+  <script src="assets/corona/js/off-canvas.js"></script>
+  <script src="assets/corona/js/misc.js"></script>
+
+  <script src="assets/js/plugin/datatables/datatables.min.js"></script>
+
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  <script type="module" src="assets/js/app/painelAdmin.js"></script>
+</body>
+</html>

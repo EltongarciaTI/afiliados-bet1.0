@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <title>Afiliados Bet | Plataformas (Admin)</title>
+  <link rel="icon" type="image/png" href="assets/afnex/images/favi.png">
+
+  <!-- Corona (paleta exata) -->
+  <link rel="stylesheet" href="assets/corona/vendors/mdi/css/materialdesignicons.min.css" />
+  <link rel="stylesheet" href="assets/corona/vendors/css/vendor.bundle.base.css" />
+  <link rel="stylesheet" href="assets/corona/css/style.css" />
+  <link rel="stylesheet" href="assets/css/igaming.css" />
+
+  <style>
+    .brand-logo img { height: 32px; width: auto; max-width: 180px; object-fit: contain; }
+    .brand-logo-mini img { height: 32px; width: auto; object-fit: contain; }
+
+    html, body { width: 100%; overflow-x: hidden; }
+    body, .container-scroller, .page-body-wrapper, .main-panel, .content-wrapper { background: #191c24 !important; }
+    .main-panel, .content-wrapper { width: 100% !important; }
+
+    .form-control, .form-select, select.form-control, .input-group-text {
+      background: #2A3038 !important;
+      border-color: #2A3038 !important;
+      color: #fff !important;
+    }
+    .form-control:focus, .form-select:focus { background: #2A3038 !important; color: #fff !important; }
+
+    .table thead th { white-space: nowrap; }
+    .badge-status { font-size: .78rem; }
+    .action-btn { padding: .25rem .5rem; }
+  </style>
+</head>
+
+<body>
+  <div class="container-scroller">
+
+    <!-- Sidebar (Corona) -->
+    <nav class="sidebar sidebar-offcanvas" id="sidebar">
+      <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
+        <a class="sidebar-brand brand-logo" href="painel-admin.html"><img src="assets/afnex/imagens/logo.png" alt="Afiliados Bet" /></a>
+        <a class="sidebar-brand brand-logo-mini" href="painel-admin.html"><img src="assets/afnex/imagens/logo.png" alt="Afiliados Bet" /></a>
+      </div>
+      <ul class="nav">
+        <li class="nav-item nav-category"><span class="nav-link">Menu</span></li>
+        <li class="nav-item menu-items">
+          <a class="nav-link" href="painel-admin.html">
+            <span class="menu-icon"><i class="mdi mdi-shield-account"></i></span>
+            <span class="menu-title">Admin</span>
+          </a>
+        </li>
+        <li class="nav-item menu-items">
+          <a class="nav-link" href="painel.html?as=affiliate&return=plataformas-admin.html">
+            <span class="menu-icon"><i class="mdi mdi-speedometer"></i></span>
+            <span class="menu-title">Ver como afiliado</span>
+          </a>
+        </li>
+        <li class="nav-item menu-items">
+          <a class="nav-link" href="admin-saques.html">
+            <span class="menu-icon"><i class="mdi mdi-cash-multiple"></i></span>
+            <span class="menu-title">Saques</span>
+          </a>
+        </li>
+        <li class="nav-item menu-items active">
+          <a class="nav-link" href="plataformas-admin.html">
+            <span class="menu-icon"><i class="mdi mdi-laptop"></i></span>
+            <span class="menu-title">Plataformas</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="container-fluid page-body-wrapper">
+      <!-- Navbar (Corona) -->
+      <nav class="navbar p-0 fixed-top d-flex flex-row">
+        <div class="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
+          <a class="navbar-brand brand-logo-mini" href="painel-admin.html"><img src="assets/afnex/imagens/logo.png" alt="Afiliados Bet" /></a>
+        </div>
+        <div class="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
+          <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+            <span class="mdi mdi-menu"></span>
+          </button>
+          <ul class="navbar-nav navbar-nav-right">
+            <li class="nav-item">
+              <a id="btnHelp" class="nav-link" href="#" target="_blank" rel="noopener noreferrer" title="Suporte">
+                <i class="mdi mdi-headset"></i>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" id="btnLogoutTop" title="Sair">
+                <i class="mdi mdi-logout text-danger"></i>
+              </a>
+            </li>
+          </ul>
+          <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+            <span class="mdi mdi-format-line-spacing"></span>
+          </button>
+        </div>
+      </nav>
+
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="page-header">
+            <h3 class="page-title mb-0">Plataformas 🧩</h3>
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="painel-admin.html">Admin</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Plataformas</li>
+              </ol>
+            </nav>
+          </div>
+
+          <div class="row">
+            <!-- Catálogo -->
+            <div class="col-12 col-xl-6 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <h4 class="card-title mb-0">Catálogo de Plataformas</h4>
+                    <button id="btnAddHouse" class="btn btn-primary btn-sm" type="button">
+                      <i class="mdi mdi-plus"></i> Nova plataforma
+                    </button>
+                  </div>
+                  <p class="card-description text-muted">Essas plataformas aparecem para os afiliados solicitarem afiliação.</p>
+                  <div class="table-responsive">
+                    <table class="table table-striped table-hover align-middle" id="housesTable">
+                      <thead>
+                        <tr>
+                          <th>Nome</th>
+                          <th>Modelo</th>
+                          <th>CPA</th>
+                          <th>Rev</th>
+                          <th>Ativo</th>
+                          <th style="width:140px">Ações</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr><td colspan="6" class="text-muted">Carregando...</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Solicitações -->
+            <div class="col-12 col-xl-6 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <h4 class="card-title mb-0">Solicitações de Afiliação</h4>
+                    <button id="btnRefreshRequests" class="btn btn-outline-primary btn-sm" type="button">
+                      <i class="mdi mdi-refresh"></i> Atualizar
+                    </button>
+                  </div>
+                  <p class="card-description text-muted">Aprove/recuse e envie o link do afiliado.</p>
+                  <div class="table-responsive">
+                    <table class="table table-striped table-hover align-middle" id="requestsTable">
+                      <thead>
+                        <tr>
+                          <th>Afiliado</th>
+                          <th>Plataforma</th>
+                          <th>Status</th>
+                          <th>Data</th>
+                          <th style="width:180px">Ações</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr><td colspan="5" class="text-muted">Carregando...</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: House CRUD -->
+  <div class="modal fade" id="houseModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="background:#191c24;">
+        <div class="modal-header">
+          <h5 class="modal-title" id="houseModalTitle">Nova plataforma</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="houseId" />
+          <div class="form-group">
+            <label>Nome *</label>
+            <input class="form-control" id="houseNome" placeholder="Ex: Blaze" />
+          </div>
+          <div class="form-group">
+            <label>Link da plataforma</label>
+            <input class="form-control" id="houseLink" placeholder="https://..." />
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label>Modelo</label>
+              <select class="form-select" id="houseModelo">
+                <option value="cpa">CPA</option>
+                <option value="rev">RevShare</option>
+                <option value="hibrido">Híbrido</option>
+              </select>
+            </div>
+            <div class="form-group col-md-6">
+              <label>Baseline</label>
+              <input class="form-control" id="houseBaseline" type="number" step="0.01" value="0" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label>CPA</label>
+              <input class="form-control" id="houseCpa" type="number" step="0.01" value="0" />
+            </div>
+            <div class="form-group col-md-6">
+              <label>Rev (%)</label>
+              <input class="form-control" id="houseRev" type="number" step="0.01" value="0" />
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="houseAtivo" checked>
+              <label class="form-check-label" for="houseAtivo">Ativa</label>
+            </div>
+          </div>
+          <div class="text-danger small" id="houseModalMsg" style="display:none;"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" id="btnSaveHouse">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Aprovar solicitação -->
+  <div class="modal fade" id="approveModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="background:#191c24;">
+        <div class="modal-header">
+          <h5 class="modal-title">Aprovar afiliação</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="reqId" />
+          <input type="hidden" id="reqAffiliateId" />
+          <input type="hidden" id="reqHouseName" />
+          <input type="hidden" id="reqHouseLink" />
+
+          <div class="form-group">
+            <label>Link do afiliado (obrigatório) *</label>
+            <input class="form-control" id="reqAffiliateLink" placeholder="https://..." />
+            <div class="small text-muted mt-1">Esse link aparecerá para o afiliado na plataforma aprovada.</div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label>Saldo disponível (opcional)</label>
+              <input class="form-control" id="reqCommissionAvailable" type="number" step="0.01" value="0" />
+            </div>
+            <div class="form-group col-md-6">
+              <label>Status inicial</label>
+              <input class="form-control" value="Aprovado" disabled />
+            </div>
+          </div>
+
+          <div class="text-danger small" id="approveModalMsg" style="display:none;"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-success" id="btnConfirmApprove"><i class="mdi mdi-check"></i> Aprovar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JS Corona -->
+  <script src="assets/corona/vendors/js/vendor.bundle.base.js"></script>
+  <script src="assets/corona/js/off-canvas.js"></script>
+  <script src="assets/corona/js/misc.js"></script>
+
+  <!-- App -->
+  <script type="module" src="assets/js/app/adminPlataformas.js"></script>
+</body>
+</html>

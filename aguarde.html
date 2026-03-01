@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Afiliados Bet | Aguardando aprovação</title>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport" />
+  <link rel="icon" href="assets/img/afiliados-bet/favicon.ico" type="image/x-icon" />
+
+  <!-- Corona (dark) styles -->
+  <link rel="stylesheet" href="assets/corona/vendors/mdi/css/materialdesignicons.min.css" />
+  <link rel="stylesheet" href="assets/corona/vendors/css/vendor.bundle.base.css" />
+  <link rel="stylesheet" href="assets/corona/css/style.css" />
+
+  <style>
+    .auth.login-bg { background-image: url('assets/corona/images/auth/register-bg.jpg'); background-size: cover; background-position: center; }
+    .brand { display:flex; align-items:center; gap:10px; }
+    .brand img { height: 34px; }
+    .muted { color: rgba(255,255,255,.7); }
+  </style>
+</head>
+<body>
+  <div class="container-scroller">
+    <div class="container-fluid page-body-wrapper full-page-wrapper">
+      <div class="row w-100 m-0">
+        <div class="content-wrapper full-page-wrapper d-flex align-items-center auth login-bg">
+          <div class="card col-lg-5 mx-auto">
+            <div class="card-body px-5 py-5">
+
+              <div class="brand mb-4">
+                <img src="assets/afnex/imagens/logo.png" alt="Afiliados Bet" />
+                <div>
+                  <h3 class="card-title text-left mb-0">Afiliados Bet</h3>
+                  <div class="muted small">Cadastro recebido</div>
+                </div>
+              </div>
+
+              <h4 class="mb-3">Obrigado por se cadastrar na Afiliados Bet!</h4>
+              <p class="muted">Seu cadastro está <strong>pendente de aprovação</strong>. Aguarde o gerente aprovar sua conta para acessar o painel.</p>
+
+              <div class="mt-4 d-flex flex-column flex-sm-row gap-2">
+                <a class="btn btn-outline-light" href="entrar.html">
+                  <i class="mdi mdi-login"></i> Voltar para o login
+                </a>
+                <button class="btn btn-danger" id="btnLogout">
+                  <i class="mdi mdi-logout"></i> Sair
+                </button>
+              </div>
+
+              <div class="mt-4 small muted" id="who"></div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/corona/vendors/js/vendor.bundle.base.js"></script>
+  <script type="module" src="assets/js/app/aguarde.js"></script>
+</body>
+</html>

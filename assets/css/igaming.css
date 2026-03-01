@@ -1,0 +1,245 @@
+/* Afiliados Bet iGaming – camada premium (não altera paleta, só refina) */
+
+:root{
+  --ab-card-radius: 14px;
+  --ab-soft-border: rgba(255,255,255,.06);
+  --ab-soft-shadow: 0 14px 40px rgba(0,0,0,.28);
+}
+
+/* Cards mais premium */
+.card{
+  border-radius: var(--ab-card-radius) !important;
+  border-color: var(--ab-soft-border) !important;
+}
+.card .card-body{ padding: 1.15rem; }
+
+/* Sidebar: melhora visual dos itens */
+.sidebar .nav .nav-item.menu-items > .nav-link{
+  border-radius: 12px;
+  margin: 0 .5rem;
+}
+.sidebar .nav .nav-item.menu-items.active > .nav-link{
+  box-shadow: 0 8px 24px rgba(0,0,0,.28);
+}
+
+/* KPIs */
+.ab-kpi{ background: radial-gradient(1200px 300px at 20% 0%, rgba(255,255,255,.06), transparent 55%) !important; }
+.ab-kpi .ab-kpi-value{ font-size: 1.7rem; font-weight: 800; letter-spacing: .2px; }
+.ab-kpi .ab-kpi-icon{
+  width: 52px; height: 52px; border-radius: 14px;
+  display:flex; align-items:center; justify-content:center;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.06);
+}
+.ab-kpi .ab-kpi-icon i{ font-size: 1.9rem; }
+
+.ab-kpi--success{ border-color: rgba(0,210,91,.22) !important; }
+.ab-kpi--success .ab-kpi-icon{ background: rgba(0,210,91,.10); border-color: rgba(0,210,91,.20); }
+
+.ab-kpi--warn{ border-color: rgba(255,171,0,.22) !important; }
+.ab-kpi--warn .ab-kpi-icon{ background: rgba(255,171,0,.10); border-color: rgba(255,171,0,.20); }
+
+.ab-kpi--info{ border-color: rgba(0,123,255,.22) !important; }
+.ab-kpi--info .ab-kpi-icon{ background: rgba(0,123,255,.10); border-color: rgba(0,123,255,.20); }
+
+/* Botões um pouco mais "SaaS" */
+.btn{ border-radius: 12px; }
+.btn-sm{ border-radius: 10px; }
+
+/* Tabelas mais limpas */
+.table{ border-color: rgba(255,255,255,.06) !important; }
+.table thead th{ border-bottom-color: rgba(255,255,255,.10) !important; }
+
+/* Plataformas: cards */
+.ab-platform-grid{ display:grid; grid-template-columns: repeat(1, minmax(0,1fr)); gap: 14px; }
+@media (min-width: 768px){ .ab-platform-grid{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
+@media (min-width: 1200px){ .ab-platform-grid{ grid-template-columns: repeat(3, minmax(0,1fr)); } }
+
+.ab-platform-card{
+  border: 1px solid var(--ab-soft-border);
+  border-radius: var(--ab-card-radius);
+  background: #191c24;
+  box-shadow: var(--ab-soft-shadow);
+  overflow:hidden;
+}
+.ab-platform-card .ab-platform-top{
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 14px 14px 0 14px;
+}
+.ab-platform-badge{ font-weight: 800; font-size: .75rem; padding: .35rem .6rem; border-radius: 999px; border: 1px solid rgba(255,255,255,.12); }
+.ab-platform-badge--ok{ background: rgba(0,210,91,.12); border-color: rgba(0,210,91,.35); }
+.ab-platform-badge--pend{ background: rgba(255,171,0,.12); border-color: rgba(255,171,0,.35); }
+.ab-platform-badge--off{ background: rgba(108,114,147,.10); border-color: rgba(108,114,147,.30); }
+
+.ab-platform-card .ab-platform-body{ padding: 12px 14px 14px 14px; }
+.ab-platform-title{ font-size: 1.05rem; font-weight: 900; margin: 0; }
+.ab-platform-sub{ color: #6c7293; font-size: .85rem; margin-top: .15rem; }
+.ab-platform-actions{ display:flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+.ab-chip{ display:inline-flex; align-items:center; gap:6px; padding:.3rem .6rem; border-radius:999px; border:1px solid rgba(255,255,255,.10); background: rgba(255,255,255,.04); font-size:.78rem; font-weight:700; }
+
+
+
+/* Inputs de link: sempre cinza (mesmo readonly/disabled) */
+.link-input,
+.link-input:focus,
+.link-input[readonly],
+.link-input:disabled{
+  background: #2A3038 !important;
+  border-color: #2A3038 !important;
+  color: #fff !important;
+}
+.link-input::placeholder{ color: rgba(255,255,255,.55) !important; }
+
+/* Corrige "faixa preta" lateral em algumas telas */
+html, body{ width:100%; overflow-x:hidden; }
+.container-scroller, .page-body-wrapper, .main-panel, .content-wrapper{ width:100%; }
+
+/* Admin: bloco de afiliado selecionado (mais moderno) */
+.ab-aff-card{
+  border:1px solid var(--ab-soft-border);
+  background: rgba(255,255,255,.02);
+  border-radius: var(--ab-card-radius);
+  padding: 1rem;
+  box-shadow: var(--ab-soft-shadow);
+}
+.ab-aff-top{ display:flex; align-items:center; gap:.9rem; }
+.ab-aff-avatar{
+  width:44px; height:44px; border-radius:14px;
+  display:flex; align-items:center; justify-content:center;
+  font-weight:800; letter-spacing:.5px;
+  background: rgba(0,210,91,.16);
+  border:1px solid rgba(0,210,91,.35);
+  color:#fff;
+}
+.ab-aff-name{ font-weight:800; font-size:1.05rem; }
+.ab-aff-meta{ color:#6c7293; font-size:.9rem; }
+.ab-aff-badges .badge{ font-size:.78rem; }
+.ab-aff-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:.6rem; margin-top:.8rem; }
+@media (max-width: 768px){ .ab-aff-grid{ grid-template-columns: 1fr; } }
+.ab-aff-item{
+  padding:.65rem .75rem;
+  border:1px solid rgba(255,255,255,.06);
+  background: rgba(0,0,0,.12);
+  border-radius: 12px;
+}
+.ab-aff-item .k{ color:#6c7293; font-size:.78rem; }
+.ab-aff-item .v{ font-weight:700; }
+
+/* Tabelas e seções (mais iGaming) */
+.ab-section-title{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:1rem; margin-bottom:.85rem;
+}
+.ab-section-title h4{
+  margin:0; font-weight:900; letter-spacing:.2px;
+}
+.ab-table{
+  border-radius: var(--ab-card-radius);
+  overflow:hidden;
+}
+.ab-table thead th{
+  text-transform: uppercase;
+  letter-spacing:.6px;
+  font-size:.72rem;
+}
+
+
+/* Casas do Afiliado – toolbar + chips + editor (moderno) */
+.ab-houses-toolbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+}
+.ab-houses-left{ display:flex; align-items:center; gap:10px; flex: 1 1 420px; }
+.ab-houses-right{ display:flex; align-items:center; gap:10px; flex: 1 1 420px; justify-content:flex-end; }
+.ab-houses-totals{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
+.ab-chip{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 10px;
+  border-radius:999px;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.08);
+  font-size:.82rem;
+  white-space:nowrap;
+}
+.ab-chip b{ font-weight:800; }
+.ab-chip .dot{
+  width:8px; height:8px; border-radius:50%;
+  background:rgba(255,255,255,.35);
+}
+.ab-chip.is-ok .dot{ background: rgba(46, 204, 113, .9); }
+.ab-chip.is-warn .dot{ background: rgba(241, 196, 15, .95); }
+.ab-chip.is-info .dot{ background: rgba(52, 152, 219, .95); }
+.ab-chip.is-bad .dot{ background: rgba(231, 76, 60, .95); }
+
+#abHousesTableCompact .badge{ border-radius:999px; }
+
+.ab-house-editor{
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:14px;
+  overflow:hidden;
+  background:rgba(255,255,255,.03);
+}
+.ab-house-editor-toggle{
+  width:100%;
+  border:0;
+  background:transparent;
+  color:inherit;
+  padding:12px 14px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+.ab-house-editor-toggle span{ display:inline-flex; align-items:center; gap:8px; font-weight:800; }
+.ab-house-editor-hint{ font-weight:600; opacity:.65; font-size:.85rem; }
+.ab-house-editor .collapse{ padding: 8px 14px 14px; }
+
+@media (max-width: 768px){
+  .ab-houses-right{ justify-content:flex-start; }
+}
+
+
+/* ===== Saque – formulário mais moderno ===== */
+.ab-input-group .input-group-text{
+  background: rgba(255,255,255,.06) !important;
+  border-color: rgba(255,255,255,.10) !important;
+  color: rgba(255,255,255,.85);
+}
+.ab-input-group .form-control{
+  background: rgba(17,24,39,.65) !important;
+  border-color: rgba(255,255,255,.10) !important;
+}
+.ab-input-group .form-control:focus{
+  box-shadow: 0 0 0 .2rem rgba(99,102,241,.18);
+}
+.ab-soft-pill{
+  border-left: 0 !important;
+  white-space: nowrap;
+}
+
+/* ===== Painel do Afiliado – cards de casas mais limpos ===== */
+.ab-house-card{
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 14px;
+  background: #111827;
+  padding: 14px 14px 12px;
+}
+.ab-house-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+}
+.ab-house-title{ font-weight: 800; }
+.ab-house-sub{ font-size: .9rem; color: rgba(255,255,255,.70); margin-top:2px; }
+.ab-house-chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:10px;
+}
