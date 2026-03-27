@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Afiliados Bet | Entrar</title>
+  <link rel="icon" type="image/png" href="assets/afnex/images/favi.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com/">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/afnex/styles.css">
+  <link rel="stylesheet" href="assets/afnex/login.css">
+  <link rel="stylesheet" href="assets/afnex/notifications.css">
+
+  <style>
+    /* pequeno ajuste: link admin */
+    .admin-access {
+      margin-top: 14px;
+      display:flex;
+      justify-content:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .admin-access a{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-weight:600;
+      font-size:.92rem;
+      color:#cfd6ff;
+      text-decoration:none;
+      opacity:.95;
+    }
+    .admin-access a:hover{ opacity:1; text-decoration:underline; }
+    .admin-lock{
+      width:18px;height:18px; display:inline-block;
+    }
+    .form-message{
+      margin-top: 12px;
+      font-size: .95rem;
+      color: #ffb4b4;
+      min-height: 18px;
+      text-align:center;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-box">
+      <a class="login-logo" href="index.html" aria-label="Voltar para a página inicial">
+        <img src="assets/afnex/images/logo.png" alt="Afiliados Bet" class="logo-img">
+      </a>
+
+      <h2 class="login-title" id="modeTitle">Entrar</h2>
+
+      <form id="loginForm" class="login-form">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="Seu email" required autocomplete="username">
+        </div>
+
+        <div class="form-group">
+          <label for="password">Senha</label>
+          <input type="password" id="password" name="password" placeholder="Sua senha" required autocomplete="current-password">
+        </div>
+
+        <button id="btnLogin" type="submit" class="btn-primary btn-login">Entrar</button>
+
+        <div id="msg" class="form-message"></div>
+
+        <div class="admin-access">
+          <a href="entrar-admin.html" title="Acesso restrito do administrador">
+            <svg class="admin-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            Área do Admin (acesso restrito)
+          </a>
+        </div>
+
+        <p class="login-footer">
+          Ainda não tem conta? <a href="index.html#cadastro">Cadastre-se</a>
+        </p>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="assets/js/app/entrar.js"></script>
+</body>
+</html>

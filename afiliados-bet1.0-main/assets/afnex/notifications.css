@@ -1,0 +1,197 @@
+/* Sistema de notificações (toast) */
+* {
+    font-family: 'Poppins', sans-serif;
+}
+
+.notifications-container {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    pointer-events: none;
+}
+.notifications-container > * {
+    pointer-events: auto;
+}
+
+.notification-toast {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 280px;
+    max-width: 420px;
+    padding: 0.875rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-family: 'Poppins', sans-serif;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.35);
+    opacity: 0;
+    transform: translateX(120%);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.notification-toast.notification-in {
+    opacity: 1;
+    transform: translateX(0);
+}
+.notification-toast.notification-out {
+    opacity: 0;
+    transform: translateX(120%);
+}
+
+.notification-icon {
+    display: flex;
+    flex-shrink: 0;
+}
+.notification-text {
+    flex: 1;
+    line-height: 1.35;
+}
+.notification-close {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0.7;
+    padding: 0 0.15rem;
+    color: inherit;
+}
+.notification-close:hover {
+    opacity: 1;
+}
+
+/* success */
+.notification-toast.notification-success {
+    background: #0d1f0d;
+    color: #a3d9a3;
+    border: 1px solid #1e3d1e;
+}
+.notification-toast.notification-success .notification-icon { color: #5cb85c; }
+
+/* error */
+.notification-toast.notification-error {
+    background: #1f0d0d;
+    color: #e8a0a0;
+    border: 1px solid #3d1e1e;
+}
+.notification-toast.notification-error .notification-icon { color: #d9534f; }
+
+/* warning */
+.notification-toast.notification-warning {
+    background: #1f1a0d;
+    color: #e8d9a0;
+    border: 1px solid #3d351e;
+}
+.notification-toast.notification-warning .notification-icon { color: #f0ad4e; }
+
+/* info */
+.notification-toast.notification-info {
+    background: #0d141f;
+    color: #a8c5e8;
+    border: 1px solid #1e2d3d;
+}
+.notification-toast.notification-info .notification-icon { color: #5bc0de; }
+
+@media (max-width: 768px) {
+    .notifications-container {
+        top: 1rem;
+        right: 1rem;
+        left: auto;
+        bottom: auto;
+    }
+    .notification-toast {
+        min-width: 0;
+        max-width: calc(100vw - 2rem);
+        width: auto;
+    }
+    /* Manter animação horizontal (de direita) em mobile também */
+    .notification-toast,
+    .notification-toast.notification-in {
+        transform: translateX(120%);
+    }
+    .notification-toast.notification-in { transform: translateX(0); }
+    .notification-toast.notification-out { transform: translateX(120%); }
+}
+
+/* Modal de confirmação (substitui confirm nativo) */
+.notification-confirm-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: rgba(0,0,0,0.7);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+.notification-confirm-overlay.notification-confirm-in {
+    opacity: 1;
+}
+.notification-confirm-overlay.notification-confirm-out {
+    opacity: 0;
+}
+
+.notification-confirm-box {
+    background: #1a1a1a;
+    color: #e8e8e8;
+    border: 1px solid #333;
+    border-radius: 10px;
+    padding: 1.5rem;
+    max-width: 380px;
+    width: 100%;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    transform: scale(0.95);
+    transition: transform 0.2s ease;
+}
+.notification-confirm-in .notification-confirm-box {
+    transform: scale(1);
+}
+.notification-confirm-out .notification-confirm-box {
+    transform: scale(0.95);
+}
+
+.notification-confirm-message {
+    margin: 0 0 1.25rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    font-family: 'Poppins', sans-serif;
+}
+
+.notification-confirm-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+}
+
+.notification-confirm-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    border: 1px solid #444;
+    transition: background 0.2s, border-color 0.2s;
+}
+.notification-confirm-cancel {
+    background: #2a2a2a;
+    color: #ccc;
+}
+.notification-confirm-cancel:hover {
+    background: #333;
+    border-color: #555;
+}
+.notification-confirm-ok {
+    background: #1e3d1e;
+    color: #a3d9a3;
+    border-color: #2d5a2d;
+}
+.notification-confirm-ok:hover {
+    background: #2d5a2d;
+    border-color: #3d6a3d;
+}

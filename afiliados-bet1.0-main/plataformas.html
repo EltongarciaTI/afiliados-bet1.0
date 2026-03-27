@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+
+<html lang="pt-br">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+<title>Afiliados Bet | Plataformas</title>
+<link rel="icon" type="image/png" href="assets/afnex/images/favi.png">
+<!-- Corona (paleta exata) -->
+<link href="assets/corona/vendors/mdi/css/materialdesignicons.min.css" rel="stylesheet"/>
+<link href="assets/corona/vendors/css/vendor.bundle.base.css" rel="stylesheet"/>
+<link href="assets/corona/css/style.css" rel="stylesheet"/>
+<link href="assets/css/igaming.css" rel="stylesheet"/>
+<!-- Pequenos ajustes de marca (sem alterar paleta) -->
+<style>
+    .brand-logo img { height: 32px; width: auto; max-width: 180px; object-fit: contain; }
+    .brand-logo-mini img { height: 32px; width: auto; object-fit: contain; }
+    .table thead th { white-space: nowrap; }
+    .badge-status { font-size: .78rem; }
+    .card .card-title { margin-bottom: .75rem; }
+    .link-input { background: #2A3038; border-color: #2A3038; color: #fff; }
+    .link-input:focus { background: #2A3038; color: #fff; }
+    .btn-icon-text i { margin-right: .4rem; }
+    /* Evita “manchas brancas” de plugins externos */
+    .dataTables_wrapper .dataTables_filter input,
+    .dataTables_wrapper .dataTables_length select {
+      background: #2A3038 !important;
+      border: 1px solid #2A3038 !important;
+      color: #fff !important;
+    }
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+      color: #fff !important;
+    }
+
+    /* DataTables: PT-BR + look Corona (evita botões claros) */
+    .dataTables_wrapper .dataTables_info,
+    .dataTables_wrapper .dataTables_length label,
+    .dataTables_wrapper .dataTables_filter label {
+      color: #6c7293 !important;
+      font-size: .9rem;
+    }
+    .dataTables_wrapper .dataTables_paginate {
+      margin-top: .75rem;
+    }
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+      background: transparent !important;
+      border: 1px solid rgba(108, 114, 147, .35) !important;
+      border-radius: .35rem !important;
+      padding: .35rem .6rem !important;
+      margin: 0 .15rem !important;
+      font-weight: 600;
+      font-family: inherit;
+    }
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+      background: rgba(0, 210, 91, .15) !important;
+      border-color: rgba(0, 210, 91, .55) !important;
+      color: #fff !important;
+    }
+    .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+      background: rgba(255, 171, 0, .12) !important;
+      border-color: rgba(255, 171, 0, .55) !important;
+      color: #fff !important;
+    }
+
+    /* Comissões: destaque com a paleta do Corona (sem “branco estranho”) */
+    .card--commission {
+      background: linear-gradient(180deg, rgba(0, 210, 91, .10) 0%, rgba(25, 28, 36, 0) 55%) !important;
+      border: 1px solid rgba(0, 210, 91, .18) !important;
+    }
+    .card--commission .badge-outline-light {
+      border-color: rgba(108,114,147,.45) !important;
+      color: #c9c9d6 !important;
+    }
+
+    /* KPI cards (Comissões): ícone à esquerda + alinhamento consistente */
+    .ab-metric{ gap: .85rem; }
+    .ab-metric-icon{
+      width: 46px;
+      height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: .65rem;
+      background: rgba(255,255,255,.04);
+      flex: 0 0 46px;
+    }
+    .ab-metric-icon i{ font-size: 1.85rem; }
+    .ab-metric-text .text-muted{ line-height: 1.05; }
+
+    /* Destaque para CPA + Baseline */
+    .badge-kpi{ font-weight: 700; }
+    .badge-kpi--cpa{
+      background: rgba(0, 210, 91, .16) !important;
+      border: 1px solid rgba(0, 210, 91, .45) !important;
+      color: #fff !important;
+    }
+    .badge-kpi--baseline{
+      background: rgba(255, 171, 0, .14) !important;
+      border: 1px solid rgba(255, 171, 0, .45) !important;
+      color: #fff !important;
+    }
+  </style>
+</head>
+<body>
+<div class="container-scroller">
+<!-- SIDEBAR (igual ao template, com toggle) -->
+<nav class="sidebar sidebar-offcanvas" id="sidebar">
+<div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
+<a class="sidebar-brand brand-logo" href="painel.html">
+<img alt="Afiliados Bet" src="assets/afnex/imagens/logo.png"/>
+</a>
+<a class="sidebar-brand brand-logo-mini" href="painel.html">
+<img alt="Afiliados Bet" src="assets/afnex/imagens/logo.png"/>
+</a>
+</div>
+<ul class="nav">
+<li class="nav-item profile">
+<div class="profile-desc">
+<div class="profile-pic">
+<div class="count-indicator">
+<div class="img-xs rounded-circle d-flex align-items-center justify-content-center" id="avatarTop" style="background:#111111;color:#fff;font-weight:700;">--</div>
+<span class="count bg-success"></span>
+</div>
+<div class="profile-name">
+<h5 class="mb-0 font-weight-normal" id="topbarNome">Afiliado</h5>
+<span id="roleBadge">AFILIADO</span>
+</div>
+</div>
+</div>
+</li>
+<li class="nav-item nav-category">
+<span class="nav-link">Menu</span>
+</li>
+<li class="nav-item menu-items">
+<a class="nav-link" href="painel.html">
+<span class="menu-icon"><i class="mdi mdi-speedometer"></i></span>
+<span class="menu-title">Dashboard</span>
+</a>
+</li>
+<li class="nav-item menu-items active" id="navPlataformas">
+<a class="nav-link" href="plataformas.html">
+<span class="menu-icon"><i class="mdi mdi-laptop"></i></span>
+<span class="menu-title">Plataformas</span>
+</a>
+</li>
+<li class="nav-item menu-items" id="navSaque">
+<a class="nav-link" href="saque.html">
+<span class="menu-icon"><i class="mdi mdi-cash-multiple"></i></span>
+<span class="menu-title">Saque</span>
+</a>
+</li>
+<!-- Owner only (mostra quando estiver em modo afiliado) -->
+<li class="nav-item menu-items" id="navBackToAdmin" style="display:none;">
+<a class="nav-link" href="painel-admin.html">
+<span class="menu-icon"><i class="mdi mdi-shield-account"></i></span>
+<span class="menu-title">Voltar ao Admin</span>
+</a>
+</li>
+</ul>
+</nav>
+<!-- MAIN -->
+<div class="container-fluid page-body-wrapper">
+<!-- TOP NAV (toggle + perfil) -->
+<nav class="navbar p-0 fixed-top d-flex flex-row">
+<div class="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
+<a class="navbar-brand brand-logo-mini" href="painel.html"><img alt="Afiliados Bet" src="assets/afnex/imagens/logo.png"/></a>
+</div>
+<div class="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
+<button class="navbar-toggler navbar-toggler align-self-center" data-toggle="minimize" type="button">
+<span class="mdi mdi-menu"></span>
+</button>
+<ul class="navbar-nav navbar-nav-right">
+<li class="nav-item">
+<a class="nav-link" href="#" id="btnHelp" rel="noopener noreferrer" target="_blank" title="Suporte">
+<i class="mdi mdi-headset"></i>
+</a>
+</li>
+<li class="nav-item dropdown">
+<a aria-expanded="false" class="nav-link" data-toggle="dropdown" href="#" id="profileDropdown">
+<div class="navbar-profile">
+<div class="img-xs rounded-circle d-flex align-items-center justify-content-center" id="avatarDrop" style="background:#111111;color:#fff;font-weight:700;">--</div>
+<p class="mb-0 d-none d-sm-block navbar-profile-name" id="dropNome">Afiliado</p>
+<i class="mdi mdi-menu-down d-none d-sm-block"></i>
+</div>
+</a>
+<div aria-labelledby="profileDropdown" class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list">
+<h6 class="p-3 mb-0">Conta</h6>
+<div class="dropdown-divider"></div>
+<div class="px-3 pb-2 text-muted" id="dropEmail" style="font-size:.85rem;">email@exemplo.com</div>
+<div class="dropdown-divider"></div>
+<a class="dropdown-item preview-item" href="#" id="btnLogoutTop">
+<div class="preview-thumbnail">
+<div class="preview-icon bg-dark rounded-circle">
+<i class="mdi mdi-logout text-danger"></i>
+</div>
+</div>
+<div class="preview-item-content">
+<p class="preview-subject mb-1">Sair</p>
+</div>
+</a>
+</div>
+</li>
+</ul>
+<button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" data-toggle="offcanvas" type="button">
+<span class="mdi mdi-format-line-spacing"></span>
+</button>
+</div>
+</nav>
+<div class="main-panel">
+<div class="content-wrapper">
+<div class="page-header">
+<h3 class="page-title">Plataformas</h3>
+<nav aria-label="breadcrumb">
+<ol class="breadcrumb">
+<li class="breadcrumb-item"><a href="painel.html">Dashboard</a></li>
+<li aria-current="page" class="breadcrumb-item active">Plataformas</li>
+</ol>
+</nav>
+</div>
+<div class="row">
+<div class="col-12 grid-margin">
+<div class="card">
+<div class="card-body">
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+<div>
+<h4 class="card-title mb-1">Minhas plataformas</h4>
+<p class="card-description mb-0">Aqui você solicita afiliação e acessa seus links por casa.</p>
+</div>
+<div class="d-flex align-items-center gap-2">
+<label class="text-muted mb-0 mr-2" for="houseFilter" style="white-space:nowrap">Filtrar métricas:</label>
+<select class="form-control" id="houseFilter" style="min-width:240px">
+<option value="all">Todas as casas</option>
+</select>
+</div>
+</div>
+<div class="text-muted mb-3" id="platformMsg"></div>
+<div class="row" id="platformCards">
+<!-- Cards -->
+</div>
+<hr class="mt-4 mb-3"/>
+<div>
+<h5 class="mb-2">Solicitações</h5>
+<div class="text-muted" id="requestsBox">Carregando...</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<footer class="footer">
+<div class="d-sm-flex justify-content-center justify-content-sm-between">
+<span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Afiliados Bet</span>
+<span class="text-muted d-block text-center text-sm-left d-sm-inline-block">© <span id="year"></span></span>
+<span class="text-muted d-block text-center text-sm-left d-sm-inline-block footer-credit">Criado por <a class="text-muted" href="https://www.instagram.com/eltongarcia100?igsh=MTdxcjRsMXV2ZjduaQ%3D%3D&amp;utm_source=qr" rel="noopener" target="_blank">@eltongarcia100</a></span>
+</div>
+</footer>
+</div>
+</div>
+</div>
+<!-- Corona JS -->
+<script src="assets/corona/vendors/js/vendor.bundle.base.js"></script>
+<script src="assets/corona/vendors/chart.js/Chart.min.js"></script>
+<script src="assets/corona/js/off-canvas.js"></script>
+<script src="assets/corona/js/misc.js"></script>
+<script src="assets/js/plugin/datatables/datatables.min.js"></script>
+<script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+<script src="assets/js/app/plataformas.js" type="module"></script>
+</body>
+</html>
