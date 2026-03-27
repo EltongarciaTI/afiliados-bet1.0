@@ -1,11 +1,6 @@
 /**
  * Afiliados Bet | Admin — Página de Afiliados
  * assets/js/app/adminAfiliados.js
- *
- * Controla a página admin-afiliados.html:
- * - Lista todos os afiliados com KPIs
- * - Painel lateral deslizante (slide-in) para editar cada afiliado
- * - Edição de casas, comissões e métricas diárias por afiliado
  */
 
 import { requireAuth, signOut } from "./autenticacao.js";
@@ -53,7 +48,7 @@ function fmtModelo(m) {
 // ─────────────────────────────────────────
 // Estado global
 // ─────────────────────────────────────────
-let _affiliates = [];          // cache completo para filtro local
+let _affiliates = [];
 let _currentAffiliateId = null;
 let _currentHouses = [];
 
@@ -87,7 +82,6 @@ async function loadAffiliates() {
 
   _affiliates = data || [];
 
-  // Busca contagem de casas para cada afiliado (em batch)
   const ids = _affiliates.map(a => a.id);
   let housesCounts = {};
   if (ids.length > 0) {
@@ -153,16 +147,14 @@ function renderTable(rows, housesCounts = {}) {
     tbody.appendChild(tr);
   }
 
-  // Clique na linha abre o painel
   tbody.querySelectorAll("tr").forEach(tr => {
     tr.addEventListener("click", (e) => {
-      if (e.target.closest(".btn-remove")) return; // deixa o botão remover tratar
+      if (e.target.closest(".btn-remove")) return;
       const id = tr.dataset.id;
       if (id) openPanel(id);
     });
   });
 
-  // Botão remover
   tbody.querySelectorAll(".btn-remove").forEach(btn => {
     btn.addEventListener("click", async (e) => {
       e.stopPropagation();
@@ -187,7 +179,8 @@ function renderTable(rows, housesCounts = {}) {
 }
 
 // ─────────────────────────────────────────
-// Filtro local (busca + status)
+// ✅ FIX: Filtro local — valores corrigidos para bater com o banco
+// "approved" / "rejected" / "pending" (não "active" / "inactive")
 // ─────────────────────────────────────────
 function applyFilter() {
   const q  = String($("searchAff")?.value || "").trim().toLowerCase();
@@ -200,7 +193,6 @@ function applyFilter() {
     return matchQ && matchSt;
   });
 
-  // Reusa housesCounts do cache – para filtro local não rebusca
   renderTable(filtered);
   updateKPIs(filtered);
 }
@@ -216,6 +208,10 @@ function openPanel(affiliateId) {
 }
 
 function closePanel() {
+  // ✅ FIX: só fecha se o modal de métricas NÃO estiver aberto
+  const modal = document.getElementById("editModal");
+  if (modal && modal.classList.contains("show")) return;
+
   document.getElementById("editPanel")?.classList.remove("open");
   document.getElementById("editOverlay")?.classList.remove("open");
   _currentAffiliateId = null;
@@ -223,7 +219,6 @@ function closePanel() {
 }
 
 async function loadPanelData(affiliateId) {
-  // Cabeçalho
   const p = _affiliates.find(a => a.id === affiliateId) || {};
   const initials = getInitials(p.full_name || p.name || p.email);
   const panelAvatar = $("panelAvatar");
@@ -231,10 +226,7 @@ async function loadPanelData(affiliateId) {
   setText("panelName",  p.full_name || p.name || "(sem nome)");
   setText("panelEmail", p.email || "—");
 
-  // Casas
   await loadPanelHouses(affiliateId);
-
-  // Stats resumo
   await loadPanelStats(affiliateId);
 }
 
@@ -261,7 +253,6 @@ async function loadPanelHouses(affiliateId) {
 
   _currentHouses = data || [];
 
-  // Atualiza resumo
   setText("pCasas",   _currentHouses.length);
   const totalSig = _currentHouses.reduce((a, h) => a + num(h.total_signups), 0);
   const totalFtd = _currentHouses.reduce((a, h) => a + num(h.total_ftds), 0);
@@ -307,7 +298,6 @@ function renderPanelHouses(houses) {
     </div>
   `).join("");
 
-  // Editar casa
   box.querySelectorAll("[data-house-edit]").forEach(btn => {
     btn.addEventListener("click", () => {
       const h = _currentHouses.find(x => x.id === btn.dataset.houseEdit);
@@ -315,7 +305,6 @@ function renderPanelHouses(houses) {
     });
   });
 
-  // Remover casa
   box.querySelectorAll("[data-house-del]").forEach(btn => {
     btn.addEventListener("click", async () => {
       if (!confirm("Remover esta casa do afiliado?")) return;
@@ -478,7 +467,6 @@ async function loadPanelStats(affiliateId) {
     </tr>
   `).join("");
 
-  // Botões editar dia (abre modal reutilizado)
   tbody.querySelectorAll("[data-stat-edit]").forEach(btn => {
     btn.addEventListener("click", () => {
       const day  = btn.dataset.statEdit;
@@ -489,9 +477,17 @@ async function loadPanelStats(affiliateId) {
 }
 
 // ─────────────────────────────────────────
-// Modal de métricas do dia (reutilizado do painelAdmin)
+// Modal de métricas do dia
 // ─────────────────────────────────────────
 function openMetricModal(row, mode = "add") {
+  // ✅ FIX: guarda o affiliateId antes de abrir o modal
+  // (o modal fica fora do painel no DOM, então _currentAffiliateId
+  //  precisa estar vivo quando o form for submetido)
+  if (!_currentAffiliateId) {
+    alert("Nenhum afiliado selecionado.");
+    return;
+  }
+
   const setMode = (m) => {
     const add = $("modeAdd"), set = $("modeSet");
     if (add) add.checked = m === "add";
@@ -503,9 +499,9 @@ function openMetricModal(row, mode = "add") {
   setMode(mode);
 
   if (row) {
-    setVal("day",     row.day);
-    setVal("signups", num(row.signups));
-    setVal("ftds",    num(row.ftds));
+    setVal("day",             row.day);
+    setVal("signups",         num(row.signups));
+    setVal("ftds",            num(row.ftds));
     setVal("qftds_cpa",       num(row.qftds_cpa));
     setVal("cpa_amount",      num(row.cpa_amount));
     setVal("revshare_amount", num(row.revshare_amount));
@@ -525,10 +521,10 @@ async function upsertDay(affiliateId, mode = "add") {
   const input = {
     signups:          num(getVal("signups")),
     ftds:             num(getVal("ftds")),
-    ftd_amount:       0, // removido da UI mas mantido no banco
+    ftd_amount:       0,
     qftds_cpa:        num(getVal("qftds_cpa")),
     cpa_amount:       num(getVal("cpa_amount")),
-    deposits_amount:  0, // removido da UI mas mantido no banco
+    deposits_amount:  0,
     revshare_amount:  num(getVal("revshare_amount")),
   };
 
@@ -582,7 +578,6 @@ async function deleteAffiliate(affiliateId) {
 // Init
 // ─────────────────────────────────────────
 async function init() {
-  // Autenticação — somente owner
   const auth = await requireAuth({ role: "owner" });
   if (!auth.ok) {
     window.location.href = "entrar-admin.html";
@@ -592,22 +587,18 @@ async function init() {
   const { user, profile } = auth;
   const nome = profile?.name || (user.email ? user.email.split("@")[0] : "Admin");
 
-  // Topbar
   setText("topbarNome", nome);
   setText("dropNome",   nome);
   setText("dropEmail",  user.email || "");
 
-  // Ajuda
   const helpLink = $("btnHelp");
   if (helpLink) helpLink.href = TELEGRAM_HELP_URL;
 
-  // Logout
   $("btnLogoutTop")?.addEventListener("click", async () => {
     await signOut();
     window.location.href = "entrar-admin.html";
   });
 
-  // ── Carregar afiliados ──
   try {
     await loadAffiliates();
   } catch (err) {
@@ -616,7 +607,6 @@ async function init() {
     if (msg) msg.innerHTML = `<div class="alert alert-danger">Erro ao carregar afiliados: ${err.message}</div>`;
   }
 
-  // ── Filtros ──
   $("searchAff")?.addEventListener("input",  applyFilter);
   $("filterStatus")?.addEventListener("change", applyFilter);
   $("btnReloadAff")?.addEventListener("click", async () => {
@@ -625,17 +615,22 @@ async function init() {
     await loadAffiliates();
   });
 
-  // ── Painel lateral: fechar ──
-  $("btnClosePanel")?.addEventListener("click", closePanel);
-  $("editOverlay")?.addEventListener("click",  closePanel);
+  $("btnClosePanel")?.addEventListener("click", () => {
+    // Fecha mesmo que o modal esteja aberto (clique explícito no X)
+    document.getElementById("editPanel")?.classList.remove("open");
+    document.getElementById("editOverlay")?.classList.remove("open");
+    _currentAffiliateId = null;
+    hidePanelHouseEditor();
+  });
 
-  // ── Painel: status do afiliado ──
+  // ✅ FIX: overlay só fecha o painel se o modal NÃO estiver aberto
+  $("editOverlay")?.addEventListener("click", closePanel);
+
   $("btnActivate")?.addEventListener("click", async () => {
     if (!_currentAffiliateId) return;
     if (!confirm("Ativar este afiliado?")) return;
     try {
       await setApprovalStatus(_currentAffiliateId, "approved");
-      // Atualiza cache local
       const p = _affiliates.find(a => a.id === _currentAffiliateId);
       if (p) p.approval_status = "approved";
       applyFilter();
@@ -678,7 +673,6 @@ async function init() {
     }
   });
 
-  // ── Painel: nova casa ──
   $("btnNewHousePanel")?.addEventListener("click", () => {
     clearPanelHouseForm();
     showPanelHouseEditor("Nova casa");
@@ -688,10 +682,12 @@ async function init() {
     hidePanelHouseEditor();
   });
 
-  // ── Painel: salvar casa ──
   $("panelHouseForm")?.addEventListener("submit", async (e) => {
     e.preventDefault();
-    if (!_currentAffiliateId) return;
+    if (!_currentAffiliateId) {
+      alert("Nenhum afiliado selecionado.");
+      return;
+    }
 
     const h = readPanelHouseForm();
     if (!h.house_name || h.house_name.length < 2) {
@@ -706,24 +702,24 @@ async function init() {
 
     try {
       const payload = {
-        affiliate_id:         _currentAffiliateId,
-        house_name:           h.house_name,
-        house_link:           h.house_link,
-        affiliate_link:       h.affiliate_link,
-        comissao_modelo:      h.comissao_modelo,
-        baseline:             h.baseline,
-        cpa:                  h.cpa,
-        rev:                  h.rev,
-        commission_available: h.commission_available,
-        commission_requested: h.commission_requested,
-        commission_paid:      h.commission_paid,
-        commission_refused:   h.commission_refused,
-        total_signups:        h.total_signups,
-        total_ftds:           h.total_ftds,
-        total_qftds_cpa:      h.total_qftds_cpa,
-        total_cpa_amount:     h.total_cpa_amount,
+        affiliate_id:          _currentAffiliateId,
+        house_name:            h.house_name,
+        house_link:            h.house_link,
+        affiliate_link:        h.affiliate_link,
+        comissao_modelo:       h.comissao_modelo,
+        baseline:              h.baseline,
+        cpa:                   h.cpa,
+        rev:                   h.rev,
+        commission_available:  h.commission_available,
+        commission_requested:  h.commission_requested,
+        commission_paid:       h.commission_paid,
+        commission_refused:    h.commission_refused,
+        total_signups:         h.total_signups,
+        total_ftds:            h.total_ftds,
+        total_qftds_cpa:       h.total_qftds_cpa,
+        total_cpa_amount:      h.total_cpa_amount,
         total_revshare_amount: h.total_revshare_amount,
-        is_active:            h.is_active,
+        is_active:             h.is_active,
       };
 
       if (h.id) {
@@ -747,20 +743,40 @@ async function init() {
     }
   });
 
-  // ── Painel: métricas diárias ──
+  // ✅ FIX: botões de métrica verificam _currentAffiliateId antes de abrir modal
   $("btnPanelAddDay")?.addEventListener("click", () => {
-    if (!_currentAffiliateId) return alert("Nenhum afiliado selecionado.");
+    if (!_currentAffiliateId) {
+      alert("Selecione um afiliado primeiro.");
+      return;
+    }
     openMetricModal(null, "add");
   });
+
   $("btnPanelEditDay")?.addEventListener("click", () => {
-    if (!_currentAffiliateId) return alert("Nenhum afiliado selecionado.");
+    if (!_currentAffiliateId) {
+      alert("Selecione um afiliado primeiro.");
+      return;
+    }
     openMetricModal(null, "set");
   });
 
-  // ── Modal: salvar métricas ──
+  // ✅ FIX: ao fechar o modal, NÃO zeramos _currentAffiliateId
+  // O modal fica fora do painel no DOM mas o afiliado continua selecionado
+  if (window.$) {
+    window.$("#editModal").on("hidden.bs.modal", () => {
+      // Apenas recarrega os stats, não fecha o painel
+      if (_currentAffiliateId) {
+        loadPanelStats(_currentAffiliateId);
+      }
+    });
+  }
+
   $("editForm")?.addEventListener("submit", async (e) => {
     e.preventDefault();
-    if (!_currentAffiliateId) return alert("Nenhum afiliado selecionado.");
+    if (!_currentAffiliateId) {
+      alert("Nenhum afiliado selecionado.");
+      return;
+    }
 
     const btn = $("btnSave");
     if (btn) btn.disabled = true;
@@ -769,7 +785,6 @@ async function init() {
       const mode = document.querySelector("input[name='metricMode']:checked")?.value || "add";
       await upsertDay(_currentAffiliateId, mode);
       if (window.$) window.$("#editModal").modal("hide");
-      await loadPanelStats(_currentAffiliateId);
     } catch (err) {
       console.error(err);
       alert("Erro ao salvar as métricas.");

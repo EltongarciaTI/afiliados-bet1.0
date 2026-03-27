@@ -72,10 +72,7 @@ async function init() {
     return;
   }
 
-
-
   const { user, profile } = auth;
-
 
   // Bloqueia afiliado não aprovado
   const role = profile?.role || "affiliate";
@@ -120,20 +117,15 @@ async function init() {
     document.body.prepend(bar);
   }
 
-  // Link do afiliado
-  // ✅ Mostramos EXATAMENTE o link configurado no painel do admin (profiles.link_marcha).
-  // Se não estiver configurado, exibimos vazio (sem fallback com localhost).
-  const link = (profile?.link_marcha && String(profile.link_marcha).trim())
+  // Link base do perfil (fallback caso não haja casa configurada)
+  const profileLink = (profile?.link_marcha && String(profile.link_marcha).trim())
     ? String(profile.link_marcha).trim()
     : "";
+
   const linkInput = qs("affiliateLink");
-  if (linkInput) linkInput.value = link;
   const hint = qs("affiliateLinkHint");
-  if (hint) hint.textContent = link ? "" : "Seu link ainda não foi configurado. Fale com o suporte.";
 
   // Casas + Comissão
-  // ✅ Preferência: múltiplas casas (affiliate_houses)
-  // Fallback: configuração única antiga (profiles)
   const selHouse = qs("dashHouseSelect");
   const bCPA = qs("badgeCPA");
   const bBaseline = qs("badgeBaseline");
@@ -146,8 +138,7 @@ async function init() {
     houses = [];
   }
 
-  // Esta seção de cards detalhados ficou redundante (já existe a tela de Plataformas),
-  // então mantemos o container oculto para deixar o Dashboard mais limpo.
+  // Container de casas oculto (métricas ficam na tela de Plataformas)
   if (housesBox) { housesBox.style.display = "none"; housesBox.innerHTML = ""; }
 
   function applyHouse(h){
@@ -174,28 +165,27 @@ async function init() {
       });
     }
   } else {
-    // fallback: aplica a primeira casa mesmo sem seletor
     if (houses.length) applyHouse(houses[0]);
   }
 
-  // Link do afiliado (input do topo) = primeira casa (para facilitar copiar rápido)
+  // ✅ FIX: resolve o link final UMA única vez, priorizando affiliate_link da primeira casa
   const firstLink = String(houses?.[0]?.affiliate_link || "").trim();
-  if (linkInput) linkInput.value = firstLink || link;
-  if (hint) hint.textContent = firstLink || link ? "" : "Seu link ainda não foi configurado. Fale com o suporte.";
+  const finalLink = firstLink || profileLink;
 
-  // (Removido) Cards de métricas por casa aqui no Dashboard — essas métricas ficam apenas na tela de Plataformas.
-  // Mantemos o Dashboard mais limpo.
+  // Atualiza input e hint com o link final resolvido
+  if (linkInput) linkInput.value = finalLink;
+  if (hint) hint.textContent = finalLink ? "" : "Seu link ainda não foi configurado. Fale com o suporte.";
 
-
+  // ✅ FIX: botão de copiar usa sempre 'finalLink' (não a variável antiga 'link')
   const btnCopy = qs("btnCopyLink");
   if (btnCopy) {
     btnCopy.addEventListener("click", async () => {
       try {
-        if (!link) {
+        if (!finalLink) {
           alert("Seu link ainda não foi configurado. Fale com o suporte.");
           return;
         }
-        await navigator.clipboard.writeText(link);
+        await navigator.clipboard.writeText(finalLink);
         btnCopy.innerHTML = '<i class="mdi mdi-check"></i> Copiado';
         setTimeout(() => (btnCopy.innerHTML = '<i class="mdi mdi-content-copy"></i> Copiar'), 1200);
       } catch {
@@ -204,14 +194,12 @@ async function init() {
     });
   }
 
-  // (Sem botões flutuando no topo) — o acesso ao admin fica no menu lateral quando aplicável.
-
   qs("btnLogout")?.addEventListener("click", async () => {
     await signOut();
     window.location.href = "entrar.html";
   });
 
-  // Botão Suporte — configure em assets/js/app/config.js
+  // Botão Suporte
   const helpLink = qs("btnHelp");
   if (helpLink) helpLink.href = TELEGRAM_HELP_URL;
 
@@ -245,32 +233,27 @@ async function init() {
   setText("mDeposits", formatBRL(data.thisMonth.deposits_amount));
   setText("mRevShare", formatBRL(data.thisMonth.revshare_amount));
 
-
   // Se estiver filtrando por casa, substitui os números por métricas/valores dessa casa.
   if(house){
-    // troca comissões
     setText("cAvailable", formatBRL(house.commission_available));
     setText("cRequested", formatBRL(house.commission_requested));
     setText("cPaid", formatBRL(house.commission_paid));
     setText("cRefused", formatBRL(house.commission_refused));
 
-    // troca métricas (totais da casa)
     setText("mSignups", formatInt(house.total_signups));
     setText("mFTDs", formatInt(house.total_ftds));
     setText("mDeposits", formatBRL(house.total_deposits_amount));
     setText("mCPA", formatBRL(house.total_cpa_amount));
     setText("mRevShare", formatBRL(house.total_revshare_amount));
 
-    // título
     const hTitle = document.getElementById("dashboardHouseTitle");
     if(hTitle) hTitle.textContent = `Filtrando por: ${house.house_name}`;
-  }else{
+  } else {
     const hTitle = document.getElementById("dashboardHouseTitle");
     if(hTitle) hTitle.textContent = "";
   }
 
-
-  // Details table (month current)
+  // Details table (mês atual)
   const tbody = document.querySelector("#detailsTable tbody");
   if (tbody) {
     tbody.innerHTML = "";
@@ -345,7 +328,7 @@ async function init() {
     }
   }
 
-  // Monthly chart (Area Chart - estilo Corona)
+  // Monthly chart (Area Chart)
   const ranges = getMonthRanges();
   const labels = ["Cadastros", "FTDs", "Depósitos", "CPA", "RevShare"];
   const lastData = [
@@ -365,7 +348,6 @@ async function init() {
 
   const ctx = document.getElementById("monthlyChart");
   if (ctx && window.Chart) {
-    // Chart.js 2.x (igual ao Corona)
     const chartCtx = ctx.getContext("2d");
     new Chart(chartCtx, {
       type: "line",

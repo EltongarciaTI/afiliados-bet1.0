@@ -228,11 +228,12 @@
                 <span class="input-group-text"><i class="mdi mdi-magnify"></i></span>
                 <input type="text" class="form-control" id="searchAff" placeholder="Buscar por nome, e-mail ou WhatsApp…" />
               </div>
+              <!-- ✅ FIX: valores corrigidos para bater com approval_status do banco -->
               <select class="form-control" id="filterStatus" style="width:auto;min-width:160px;">
                 <option value="">Todos os status</option>
-                <option value="active">Ativos</option>
+                <option value="approved">Ativos</option>
                 <option value="pending">Pendentes</option>
-                <option value="inactive">Inativos</option>
+                <option value="rejected">Recusados</option>
               </select>
               <button class="btn btn-outline-light btn-sm" id="btnReloadAff" type="button">
                 <i class="mdi mdi-refresh"></i> Atualizar
@@ -457,7 +458,7 @@
 
 </div><!-- /editPanel -->
 
-<!-- Modal métricas dia (reutiliza lógica do painel admin) -->
+<!-- Modal métricas dia -->
 <div aria-hidden="true" class="modal fade" id="editModal" tabindex="-1">
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content">
