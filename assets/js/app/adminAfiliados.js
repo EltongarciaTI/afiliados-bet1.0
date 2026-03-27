@@ -587,14 +587,8 @@ async function init() {
     await loadAffiliates();
   });
 
-  // ✅ Somente o botão X fecha o painel
+  // ✅ Somente o botão X fecha o painel — overlay não tem listener de clique
   $("btnClosePanel")?.addEventListener("click", closePanel);
-
-  // ✅ Overlay verifica se há modal aberto antes de fechar o painel
-  $("editOverlay")?.addEventListener("click", () => {
-    const modalAberto = document.querySelector(".modal.show");
-    if (!modalAberto) closePanel();
-  });
 
   $("btnActivate")?.addEventListener("click", async () => {
     if (!_currentAffiliateId) return;
