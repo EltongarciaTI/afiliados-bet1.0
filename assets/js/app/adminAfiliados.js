@@ -8,9 +8,6 @@ import { supabase } from "./clienteSupabase.js";
 import { formatBRL, formatInt, getMonthRanges } from "./metricas.js";
 import { TELEGRAM_HELP_URL } from "./config.js";
 
-// ─────────────────────────────────────────
-// Helpers
-// ─────────────────────────────────────────
 const $ = (id) => document.getElementById(id);
 
 function safeDate(iso) {
@@ -71,15 +68,12 @@ function updateKPIs(rows) {
 async function loadAffiliates() {
   const { data, error } = await supabase
     .from("profiles")
-    .select(`
-      id, name, full_name, email, whatsapp, instagram, telegram,
-      approval_status, created_at, approved_at, role
-    `)
+    .select(`id, name, full_name, email, whatsapp, instagram, telegram,
+      approval_status, created_at, approved_at, role`)
     .or("role.is.null,role.neq.owner")
     .order("created_at", { ascending: false });
 
   if (error) throw error;
-
   _affiliates = data || [];
 
   const ids = _affiliates.map(a => a.id);
@@ -179,8 +173,7 @@ function renderTable(rows, housesCounts = {}) {
 }
 
 // ─────────────────────────────────────────
-// ✅ FIX: Filtro local — valores corrigidos para bater com o banco
-// "approved" / "rejected" / "pending" (não "active" / "inactive")
+// Filtro local
 // ─────────────────────────────────────────
 function applyFilter() {
   const q  = String($("searchAff")?.value || "").trim().toLowerCase();
@@ -207,14 +200,11 @@ function openPanel(affiliateId) {
   loadPanelData(affiliateId);
 }
 
+// ✅ closePanel só é chamado pelo botão X explícito
 function closePanel() {
-  // ✅ FIX: só fecha se o modal de métricas NÃO estiver aberto
-  const modal = document.getElementById("editModal");
-  if (modal && modal.classList.contains("show")) return;
-
+  _currentAffiliateId = null;
   document.getElementById("editPanel")?.classList.remove("open");
   document.getElementById("editOverlay")?.classList.remove("open");
-  _currentAffiliateId = null;
   hidePanelHouseEditor();
 }
 
@@ -225,7 +215,6 @@ async function loadPanelData(affiliateId) {
   if (panelAvatar) panelAvatar.textContent = initials;
   setText("panelName",  p.full_name || p.name || "(sem nome)");
   setText("panelEmail", p.email || "—");
-
   await loadPanelHouses(affiliateId);
   await loadPanelStats(affiliateId);
 }
@@ -236,29 +225,20 @@ async function loadPanelData(affiliateId) {
 async function loadPanelHouses(affiliateId) {
   const { data, error } = await supabase
     .from("affiliate_houses")
-    .select(`
-      id, house_name, house_link, affiliate_link,
+    .select(`id, house_name, house_link, affiliate_link,
       comissao_modelo, baseline, cpa, rev,
       commission_available, commission_requested, commission_paid, commission_refused,
       total_signups, total_ftds, total_cpa_amount, total_revshare_amount,
-      is_active, created_at
-    `)
+      is_active, created_at`)
     .eq("affiliate_id", affiliateId)
     .order("created_at", { ascending: false });
 
-  if (error) {
-    console.error("Erro ao carregar casas:", error);
-    return;
-  }
+  if (error) { console.error("Erro ao carregar casas:", error); return; }
 
   _currentHouses = data || [];
-
   setText("pCasas",   _currentHouses.length);
-  const totalSig = _currentHouses.reduce((a, h) => a + num(h.total_signups), 0);
-  const totalFtd = _currentHouses.reduce((a, h) => a + num(h.total_ftds), 0);
-  setText("pSignups", totalSig);
-  setText("pFTDs",    totalFtd);
-
+  setText("pSignups", _currentHouses.reduce((a, h) => a + num(h.total_signups), 0));
+  setText("pFTDs",    _currentHouses.reduce((a, h) => a + num(h.total_ftds), 0));
   renderPanelHouses(_currentHouses);
 }
 
@@ -311,9 +291,7 @@ function renderPanelHouses(houses) {
       btn.disabled = true;
       try {
         const { error } = await supabase
-          .from("affiliate_houses")
-          .delete()
-          .eq("id", btn.dataset.houseDel);
+          .from("affiliate_houses").delete().eq("id", btn.dataset.houseDel);
         if (error) throw error;
         await syncProfileCommissions(_currentAffiliateId);
         await loadPanelHouses(_currentAffiliateId);
@@ -328,7 +306,7 @@ function renderPanelHouses(houses) {
 }
 
 // ─────────────────────────────────────────
-// Editor de casa no painel
+// Editor de casa
 // ─────────────────────────────────────────
 function showPanelHouseEditor(title = "Nova casa") {
   const ed = $("panelHouseEditor");
@@ -346,33 +324,33 @@ function hidePanelHouseEditor() {
 
 function clearPanelHouseForm() {
   ["ph_id","ph_name","ph_link","ph_affiliate_link"].forEach(id => setVal(id, ""));
-  ["ph_model"].forEach(id => setVal(id, "cpa"));
+  setVal("ph_model", "cpa");
   ["ph_baseline","ph_cpa","ph_rev",
    "ph_commission_available","ph_commission_requested","ph_commission_paid","ph_commission_refused",
-   "ph_signups","ph_ftds","ph_qftds_cpa","ph_cpa_amount","ph_rev_amount"].forEach(id => setVal(id, 0));
+   "ph_signups","ph_ftds","ph_qftds_cpa","ph_cpa_amount","ph_rev_amount"].forEach(id => setVal(id, ""));
   const chk = $("ph_active");
   if (chk) chk.checked = true;
   setText("panelHouseStatus", "");
 }
 
 function fillPanelHouseForm(h) {
-  setVal("ph_id",                    h.id);
-  setVal("ph_name",                  h.house_name || "");
-  setVal("ph_link",                  h.house_link || "");
-  setVal("ph_affiliate_link",        h.affiliate_link || "");
-  setVal("ph_model",                 (h.comissao_modelo || "cpa").toLowerCase());
-  setVal("ph_baseline",              h.baseline ?? 0);
-  setVal("ph_cpa",                   h.cpa ?? 0);
-  setVal("ph_rev",                   h.rev ?? 0);
-  setVal("ph_commission_available",  h.commission_available ?? 0);
-  setVal("ph_commission_requested",  h.commission_requested ?? 0);
-  setVal("ph_commission_paid",       h.commission_paid ?? 0);
-  setVal("ph_commission_refused",    h.commission_refused ?? 0);
-  setVal("ph_signups",               h.total_signups ?? 0);
-  setVal("ph_ftds",                  h.total_ftds ?? 0);
-  setVal("ph_qftds_cpa",             h.total_qftds_cpa ?? 0);
-  setVal("ph_cpa_amount",            h.total_cpa_amount ?? 0);
-  setVal("ph_rev_amount",            h.total_revshare_amount ?? 0);
+  setVal("ph_id",                   h.id);
+  setVal("ph_name",                 h.house_name || "");
+  setVal("ph_link",                 h.house_link || "");
+  setVal("ph_affiliate_link",       h.affiliate_link || "");
+  setVal("ph_model",                (h.comissao_modelo || "cpa").toLowerCase());
+  setVal("ph_baseline",             h.baseline ?? "");
+  setVal("ph_cpa",                  h.cpa ?? "");
+  setVal("ph_rev",                  h.rev ?? "");
+  setVal("ph_commission_available", h.commission_available ?? "");
+  setVal("ph_commission_requested", h.commission_requested ?? "");
+  setVal("ph_commission_paid",      h.commission_paid ?? "");
+  setVal("ph_commission_refused",   h.commission_refused ?? "");
+  setVal("ph_signups",              h.total_signups ?? "");
+  setVal("ph_ftds",                 h.total_ftds ?? "");
+  setVal("ph_qftds_cpa",            h.total_qftds_cpa ?? "");
+  setVal("ph_cpa_amount",           h.total_cpa_amount ?? "");
+  setVal("ph_rev_amount",           h.total_revshare_amount ?? "");
   const chk = $("ph_active");
   if (chk) chk.checked = !!h.is_active;
   showPanelHouseEditor("Editar casa");
@@ -381,29 +359,29 @@ function fillPanelHouseForm(h) {
 function readPanelHouseForm() {
   const chk = $("ph_active");
   return {
-    id:                      getVal("ph_id") || null,
-    house_name:              String(getVal("ph_name") || "").trim(),
-    house_link:              String(getVal("ph_link") || "").trim() || null,
-    affiliate_link:          String(getVal("ph_affiliate_link") || "").trim() || null,
-    comissao_modelo:         String(getVal("ph_model") || "cpa").toLowerCase(),
-    baseline:                num(getVal("ph_baseline")),
-    cpa:                     num(getVal("ph_cpa")),
-    rev:                     num(getVal("ph_rev")),
-    commission_available:    num(getVal("ph_commission_available")),
-    commission_requested:    num(getVal("ph_commission_requested")),
-    commission_paid:         num(getVal("ph_commission_paid")),
-    commission_refused:      num(getVal("ph_commission_refused")),
-    total_signups:           num(getVal("ph_signups")),
-    total_ftds:              num(getVal("ph_ftds")),
-    total_qftds_cpa:         num(getVal("ph_qftds_cpa")),
-    total_cpa_amount:        num(getVal("ph_cpa_amount")),
-    total_revshare_amount:   num(getVal("ph_rev_amount")),
-    is_active:               chk ? !!chk.checked : true,
+    id:                    getVal("ph_id") || null,
+    house_name:            String(getVal("ph_name") || "").trim(),
+    house_link:            String(getVal("ph_link") || "").trim() || null,
+    affiliate_link:        String(getVal("ph_affiliate_link") || "").trim() || null,
+    comissao_modelo:       String(getVal("ph_model") || "cpa").toLowerCase(),
+    baseline:              num(getVal("ph_baseline")),
+    cpa:                   num(getVal("ph_cpa")),
+    rev:                   num(getVal("ph_rev")),
+    commission_available:  num(getVal("ph_commission_available")),
+    commission_requested:  num(getVal("ph_commission_requested")),
+    commission_paid:       num(getVal("ph_commission_paid")),
+    commission_refused:    num(getVal("ph_commission_refused")),
+    total_signups:         num(getVal("ph_signups")),
+    total_ftds:            num(getVal("ph_ftds")),
+    total_qftds_cpa:       num(getVal("ph_qftds_cpa")),
+    total_cpa_amount:      num(getVal("ph_cpa_amount")),
+    total_revshare_amount: num(getVal("ph_rev_amount")),
+    is_active:             chk ? !!chk.checked : true,
   };
 }
 
 // ─────────────────────────────────────────
-// Sincroniza comissões do profiles com soma das casas
+// Sincroniza comissões
 // ─────────────────────────────────────────
 async function syncProfileCommissions(affiliateId) {
   const { data, error } = await supabase
@@ -423,7 +401,7 @@ async function syncProfileCommissions(affiliateId) {
 }
 
 // ─────────────────────────────────────────
-// Stats diárias no painel
+// Stats diárias
 // ─────────────────────────────────────────
 async function loadPanelStats(affiliateId) {
   const tbody = document.querySelector("#panelStatsTable tbody");
@@ -444,7 +422,6 @@ async function loadPanelStats(affiliateId) {
   }
 
   const rows = data || [];
-
   if (!rows.length) {
     tbody.innerHTML = `<tr><td colspan="7" class="text-muted small text-center py-2">Sem métricas este mês.</td></tr>`;
     return;
@@ -469,22 +446,19 @@ async function loadPanelStats(affiliateId) {
 
   tbody.querySelectorAll("[data-stat-edit]").forEach(btn => {
     btn.addEventListener("click", () => {
-      const day  = btn.dataset.statEdit;
-      const row  = rows.find(r => r.day === day);
+      const day = btn.dataset.statEdit;
+      const row = rows.find(r => r.day === day);
       openMetricModal(row, "set");
     });
   });
 }
 
 // ─────────────────────────────────────────
-// Modal de métricas do dia
+// Modal de métricas
 // ─────────────────────────────────────────
 function openMetricModal(row, mode = "add") {
-  // ✅ FIX: guarda o affiliateId antes de abrir o modal
-  // (o modal fica fora do painel no DOM, então _currentAffiliateId
-  //  precisa estar vivo quando o form for submetido)
   if (!_currentAffiliateId) {
-    alert("Nenhum afiliado selecionado.");
+    alert("Selecione um afiliado primeiro.");
     return;
   }
 
@@ -508,7 +482,8 @@ function openMetricModal(row, mode = "add") {
   } else {
     const d = new Date();
     setVal("day", `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`);
-    ["signups","ftds","qftds_cpa","cpa_amount","revshare_amount"].forEach(k => setVal(k, 0));
+    // ✅ Limpa os campos para permitir digitação livre
+    ["signups","ftds","qftds_cpa","cpa_amount","revshare_amount"].forEach(k => setVal(k, ""));
   }
 
   if (window.$) window.$("#editModal").modal("show");
@@ -519,13 +494,13 @@ async function upsertDay(affiliateId, mode = "add") {
   if (!day) throw new Error("Dia inválido");
 
   const input = {
-    signups:          num(getVal("signups")),
-    ftds:             num(getVal("ftds")),
-    ftd_amount:       0,
-    qftds_cpa:        num(getVal("qftds_cpa")),
-    cpa_amount:       num(getVal("cpa_amount")),
-    deposits_amount:  0,
-    revshare_amount:  num(getVal("revshare_amount")),
+    signups:         num(getVal("signups")),
+    ftds:            num(getVal("ftds")),
+    ftd_amount:      0,
+    qftds_cpa:       num(getVal("qftds_cpa")),
+    cpa_amount:      num(getVal("cpa_amount")),
+    deposits_amount: 0,
+    revshare_amount: num(getVal("revshare_amount")),
   };
 
   let finalRow = { ...input };
@@ -540,13 +515,13 @@ async function upsertDay(affiliateId, mode = "add") {
 
     if (existing) {
       finalRow = {
-        signups:          num(existing.signups)          + input.signups,
-        ftds:             num(existing.ftds)             + input.ftds,
-        ftd_amount:       num(existing.ftd_amount),
-        qftds_cpa:        num(existing.qftds_cpa)        + input.qftds_cpa,
-        cpa_amount:       num(existing.cpa_amount)       + input.cpa_amount,
-        deposits_amount:  num(existing.deposits_amount),
-        revshare_amount:  num(existing.revshare_amount)  + input.revshare_amount,
+        signups:         num(existing.signups)         + input.signups,
+        ftds:            num(existing.ftds)            + input.ftds,
+        ftd_amount:      num(existing.ftd_amount),
+        qftds_cpa:       num(existing.qftds_cpa)       + input.qftds_cpa,
+        cpa_amount:      num(existing.cpa_amount)      + input.cpa_amount,
+        deposits_amount: num(existing.deposits_amount),
+        revshare_amount: num(existing.revshare_amount) + input.revshare_amount,
       };
     }
   }
@@ -559,13 +534,11 @@ async function upsertDay(affiliateId, mode = "add") {
 }
 
 // ─────────────────────────────────────────
-// Ações de status do afiliado
+// Ações de status
 // ─────────────────────────────────────────
 async function setApprovalStatus(affiliateId, status) {
-  const { error } = await supabase
-    .from("profiles")
-    .update({ approval_status: status })
-    .eq("id", affiliateId);
+  const { error } = await supabase.from("profiles")
+    .update({ approval_status: status }).eq("id", affiliateId);
   if (error) throw error;
 }
 
@@ -586,7 +559,6 @@ async function init() {
 
   const { user, profile } = auth;
   const nome = profile?.name || (user.email ? user.email.split("@")[0] : "Admin");
-
   setText("topbarNome", nome);
   setText("dropNome",   nome);
   setText("dropEmail",  user.email || "");
@@ -607,24 +579,22 @@ async function init() {
     if (msg) msg.innerHTML = `<div class="alert alert-danger">Erro ao carregar afiliados: ${err.message}</div>`;
   }
 
-  $("searchAff")?.addEventListener("input",  applyFilter);
+  $("searchAff")?.addEventListener("input", applyFilter);
   $("filterStatus")?.addEventListener("change", applyFilter);
   $("btnReloadAff")?.addEventListener("click", async () => {
-    $("searchAff").value    = "";
+    $("searchAff").value = "";
     $("filterStatus").value = "";
     await loadAffiliates();
   });
 
-  $("btnClosePanel")?.addEventListener("click", () => {
-    // Fecha mesmo que o modal esteja aberto (clique explícito no X)
-    document.getElementById("editPanel")?.classList.remove("open");
-    document.getElementById("editOverlay")?.classList.remove("open");
-    _currentAffiliateId = null;
-    hidePanelHouseEditor();
-  });
+  // ✅ Somente o botão X fecha o painel
+  $("btnClosePanel")?.addEventListener("click", closePanel);
 
-  // ✅ FIX: overlay só fecha o painel se o modal NÃO estiver aberto
-  $("editOverlay")?.addEventListener("click", closePanel);
+  // ✅ Overlay verifica se há modal aberto antes de fechar o painel
+  $("editOverlay")?.addEventListener("click", () => {
+    const modalAberto = document.querySelector(".modal.show");
+    if (!modalAberto) closePanel();
+  });
 
   $("btnActivate")?.addEventListener("click", async () => {
     if (!_currentAffiliateId) return;
@@ -633,13 +603,9 @@ async function init() {
       await setApprovalStatus(_currentAffiliateId, "approved");
       const p = _affiliates.find(a => a.id === _currentAffiliateId);
       if (p) p.approval_status = "approved";
-      applyFilter();
-      updateKPIs(_affiliates);
+      applyFilter(); updateKPIs(_affiliates);
       alert("Afiliado ativado ✅");
-    } catch (err) {
-      console.error(err);
-      alert("Erro ao ativar afiliado.");
-    }
+    } catch (err) { console.error(err); alert("Erro ao ativar afiliado."); }
   });
 
   $("btnReopen")?.addEventListener("click", async () => {
@@ -649,13 +615,9 @@ async function init() {
       await setApprovalStatus(_currentAffiliateId, "pending");
       const p = _affiliates.find(a => a.id === _currentAffiliateId);
       if (p) p.approval_status = "pending";
-      applyFilter();
-      updateKPIs(_affiliates);
+      applyFilter(); updateKPIs(_affiliates);
       alert("Cadastro reaberto ✅");
-    } catch (err) {
-      console.error(err);
-      alert("Erro ao reabrir cadastro.");
-    }
+    } catch (err) { console.error(err); alert("Erro ao reabrir cadastro."); }
   });
 
   $("btnRemove")?.addEventListener("click", async () => {
@@ -667,10 +629,7 @@ async function init() {
       await deleteAffiliate(_currentAffiliateId);
       closePanel();
       await loadAffiliates();
-    } catch (err) {
-      console.error(err);
-      alert("Não foi possível remover. Verifique as permissões.");
-    }
+    } catch (err) { console.error(err); alert("Não foi possível remover. Verifique as permissões."); }
   });
 
   $("btnNewHousePanel")?.addEventListener("click", () => {
@@ -678,24 +637,16 @@ async function init() {
     showPanelHouseEditor("Nova casa");
   });
 
-  $("btnCancelHousePanel")?.addEventListener("click", () => {
-    hidePanelHouseEditor();
-  });
+  $("btnCancelHousePanel")?.addEventListener("click", hidePanelHouseEditor);
 
   $("panelHouseForm")?.addEventListener("submit", async (e) => {
     e.preventDefault();
-    if (!_currentAffiliateId) {
-      alert("Nenhum afiliado selecionado.");
-      return;
-    }
+    if (!_currentAffiliateId) { alert("Nenhum afiliado selecionado."); return; }
 
     const h = readPanelHouseForm();
-    if (!h.house_name || h.house_name.length < 2) {
-      alert("Informe o nome da casa.");
-      return;
-    }
+    if (!h.house_name || h.house_name.length < 2) { alert("Informe o nome da casa."); return; }
 
-    const btn    = $("btnSaveHousePanel");
+    const btn = $("btnSaveHousePanel");
     const status = $("panelHouseStatus");
     if (btn) btn.disabled = true;
     if (status) status.textContent = "Salvando…";
@@ -743,40 +694,26 @@ async function init() {
     }
   });
 
-  // ✅ FIX: botões de métrica verificam _currentAffiliateId antes de abrir modal
   $("btnPanelAddDay")?.addEventListener("click", () => {
-    if (!_currentAffiliateId) {
-      alert("Selecione um afiliado primeiro.");
-      return;
-    }
+    if (!_currentAffiliateId) { alert("Selecione um afiliado primeiro."); return; }
     openMetricModal(null, "add");
   });
 
   $("btnPanelEditDay")?.addEventListener("click", () => {
-    if (!_currentAffiliateId) {
-      alert("Selecione um afiliado primeiro.");
-      return;
-    }
+    if (!_currentAffiliateId) { alert("Selecione um afiliado primeiro."); return; }
     openMetricModal(null, "set");
   });
 
-  // ✅ FIX: ao fechar o modal, NÃO zeramos _currentAffiliateId
-  // O modal fica fora do painel no DOM mas o afiliado continua selecionado
+  // ✅ Fechar modal NÃO zera _currentAffiliateId — apenas recarrega stats
   if (window.$) {
     window.$("#editModal").on("hidden.bs.modal", () => {
-      // Apenas recarrega os stats, não fecha o painel
-      if (_currentAffiliateId) {
-        loadPanelStats(_currentAffiliateId);
-      }
+      if (_currentAffiliateId) loadPanelStats(_currentAffiliateId);
     });
   }
 
   $("editForm")?.addEventListener("submit", async (e) => {
     e.preventDefault();
-    if (!_currentAffiliateId) {
-      alert("Nenhum afiliado selecionado.");
-      return;
-    }
+    if (!_currentAffiliateId) { alert("Nenhum afiliado selecionado."); return; }
 
     const btn = $("btnSave");
     if (btn) btn.disabled = true;

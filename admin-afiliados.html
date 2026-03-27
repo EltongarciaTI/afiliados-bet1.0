@@ -5,12 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <title>Afiliados Bet | Afiliados (Admin)</title>
   <link rel="icon" type="image/png" href="assets/afnex/images/favi.png">
-
   <link rel="stylesheet" href="assets/corona/vendors/mdi/css/materialdesignicons.min.css" />
   <link rel="stylesheet" href="assets/corona/vendors/css/vendor.bundle.base.css" />
   <link rel="stylesheet" href="assets/corona/css/style.css" />
   <link rel="stylesheet" href="assets/css/igaming.css" />
-
   <style>
     .brand-logo img { height: 32px; width: auto; max-width: 180px; object-fit: contain; }
     .brand-logo-mini img { height: 32px; width: auto; object-fit: contain; }
@@ -21,8 +19,6 @@
       background: #2A3038 !important; border-color: #2A3038 !important; color: #fff !important;
     }
     .form-control:focus, .form-select:focus { background: #2A3038 !important; color: #fff !important; }
-
-    /* ── Tabela de afiliados ── */
     .aff-avatar {
       width: 36px; height: 36px; border-radius: 50%;
       background: linear-gradient(135deg, #00d25b 0%, #0090ff 100%);
@@ -31,32 +27,30 @@
     }
     .aff-name { font-weight: 600; font-size: .95rem; }
     .aff-email { font-size: .8rem; color: #6c7293; }
-
-    /* ── Status badges ── */
     .badge-status { font-size: .75rem; padding: .3em .65em; border-radius: 20px; font-weight: 600; }
     .badge-active   { background: rgba(0,210,91,.15);  border: 1px solid rgba(0,210,91,.45);  color: #00d25b; }
     .badge-pending  { background: rgba(255,171,0,.15); border: 1px solid rgba(255,171,0,.45); color: #ffab00; }
     .badge-inactive { background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.18); color: #6c7293; }
-
-    /* ── Painel lateral de edição ── */
     #editPanel {
       position: fixed; top: 0; right: -520px; width: 500px; height: 100vh;
       background: #1e2130; border-left: 1px solid rgba(255,255,255,.07);
-      z-index: 9999; overflow-y: auto;
+      z-index: 1050; overflow-y: auto;
       transition: right .3s cubic-bezier(.4,0,.2,1);
       box-shadow: -8px 0 32px rgba(0,0,0,.45);
     }
     #editPanel.open { right: 0; }
     #editOverlay {
-      display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 9998;
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45);
+      /* ✅ z-index menor que o painel — overlay nunca cobre o painel */
+      z-index: 1040;
     }
     #editOverlay.open { display: block; }
+    #editPanel { z-index: 1050; } /* sempre acima do overlay */
     .panel-header {
       padding: 1.25rem 1.5rem; border-bottom: 1px solid rgba(255,255,255,.07);
       display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0;
       background: #1e2130; z-index: 10;
     }
-    .panel-header h5 { margin: 0; font-size: 1rem; font-weight: 700; }
     .panel-close {
       background: none; border: none; color: #6c7293; font-size: 1.4rem;
       cursor: pointer; line-height: 1; padding: 0; transition: color .2s;
@@ -73,18 +67,11 @@
       display: flex; align-items: center; justify-content: center;
       font-weight: 800; font-size: 1.1rem; color: #fff; margin-right: .9rem; flex: 0 0 48px;
     }
-    .stat-mini {
-      background: rgba(255,255,255,.04); border-radius: .5rem;
-      padding: .6rem .85rem; text-align: center;
-    }
+    .stat-mini { background: rgba(255,255,255,.04); border-radius: .5rem; padding: .6rem .85rem; text-align: center; }
     .stat-mini-val { font-size: 1.15rem; font-weight: 800; }
     .stat-mini-lbl { font-size: .72rem; color: #6c7293; }
-
-    /* ── Toolbar pesquisa ── */
     .aff-toolbar { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; margin-bottom: 1.25rem; }
     .aff-toolbar .input-group { max-width: 320px; }
-
-    /* ── KPI cards topo ── */
     .kpi-mini { background: rgba(255,255,255,.04); border-radius: .75rem; padding: .9rem 1.1rem; display: flex; align-items: center; gap: .85rem; }
     .kpi-mini-icon { width: 40px; height: 40px; border-radius: .5rem; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; }
     .kpi-mini-val { font-size: 1.25rem; font-weight: 800; line-height: 1; }
@@ -93,24 +80,20 @@
     .kpi-yellow .kpi-mini-icon { background: rgba(255,171,0,.12); color: #ffab00; }
     .kpi-blue .kpi-mini-icon { background: rgba(0,144,255,.12); color: #0090ff; }
     .kpi-red .kpi-mini-icon { background: rgba(252,75,108,.12); color: #fc4b6c; }
-
-    /* ── Tabela linha clicável ── */
     #affiliatesTable tbody tr { cursor: pointer; transition: background .15s; }
     #affiliatesTable tbody tr:hover td { background: rgba(0,210,91,.04) !important; }
-
-    /* Scrollbar customizada no panel */
     #editPanel::-webkit-scrollbar { width: 5px; }
     #editPanel::-webkit-scrollbar-track { background: transparent; }
     #editPanel::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 4px; }
-
-    .action-btn { padding: .25rem .5rem; }
     .divider-soft { border-top: 1px solid rgba(255,255,255,.06); margin: 1rem 0; }
+    /* ✅ Remove setas dos inputs number — permite digitar livremente */
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+    input[type=number] { -moz-appearance: textfield; appearance: textfield; }
   </style>
 </head>
 <body>
 <div class="container-scroller">
-
-  <!-- Sidebar -->
   <nav class="sidebar sidebar-offcanvas" id="sidebar">
     <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
       <a class="sidebar-brand brand-logo" href="painel-admin.html"><img src="assets/afnex/imagens/logo.png" alt="Afiliados Bet" /></a>
@@ -152,7 +135,6 @@
   </nav>
 
   <div class="container-fluid page-body-wrapper">
-    <!-- Navbar -->
     <nav class="navbar p-0 fixed-top d-flex flex-row">
       <div class="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
         <a class="navbar-brand brand-logo-mini" href="painel-admin.html"><img src="assets/afnex/imagens/logo.png" alt="Afiliados Bet" /></a>
@@ -181,7 +163,6 @@
 
     <div class="main-panel">
       <div class="content-wrapper">
-
         <div class="page-header">
           <h3 class="page-title mb-0">Afiliados 👥</h3>
           <nav aria-label="breadcrumb">
@@ -192,7 +173,6 @@
           </nav>
         </div>
 
-        <!-- KPIs rápidos -->
         <div class="row g-3 mb-4">
           <div class="col-6 col-md-3">
             <div class="kpi-mini kpi-green">
@@ -220,7 +200,6 @@
           </div>
         </div>
 
-        <!-- Tabela principal -->
         <div class="card">
           <div class="card-body">
             <div class="aff-toolbar">
@@ -228,7 +207,7 @@
                 <span class="input-group-text"><i class="mdi mdi-magnify"></i></span>
                 <input type="text" class="form-control" id="searchAff" placeholder="Buscar por nome, e-mail ou WhatsApp…" />
               </div>
-              <!-- ✅ FIX: valores corrigidos para bater com approval_status do banco -->
+              <!-- ✅ Valores corrigidos para bater com o banco -->
               <select class="form-control" id="filterStatus" style="width:auto;min-width:160px;">
                 <option value="">Todos os status</option>
                 <option value="approved">Ativos</option>
@@ -261,24 +240,21 @@
             <div id="affMsg" class="mt-2"></div>
           </div>
         </div>
-
-      </div><!-- /content-wrapper -->
+      </div>
 
       <footer class="footer">
         <div class="d-sm-flex justify-content-center justify-content-sm-between">
           <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Afiliados Bet • Admin</span>
           <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">© <span id="year"></span></span>
-          <span class="text-muted d-block text-center text-sm-left d-sm-inline-block footer-credit">Criado por <a class="text-muted" href="https://www.instagram.com/eltongarcia100?igsh=MTdxcjRsMXV2ZjduaQ%3D%3D&utm_source=qr" target="_blank" rel="noopener">@eltongarcia100</a></span>
+          <span class="text-muted d-block text-center text-sm-left d-sm-inline-block footer-credit">Criado por <a class="text-muted" href="https://www.instagram.com/eltongarcia100" target="_blank" rel="noopener">@eltongarcia100</a></span>
         </div>
       </footer>
-    </div><!-- /main-panel -->
+    </div>
   </div>
-</div><!-- /container-scroller -->
+</div>
 
-<!-- ░░ OVERLAY ░░ -->
 <div id="editOverlay"></div>
 
-<!-- ░░ PAINEL LATERAL DE EDIÇÃO ░░ -->
 <div id="editPanel">
   <div class="panel-header">
     <div class="d-flex align-items-center gap-3">
@@ -291,7 +267,6 @@
     <button class="panel-close" id="btnClosePanel" title="Fechar">&times;</button>
   </div>
 
-  <!-- Info rápida -->
   <div class="panel-section">
     <div class="panel-section-title">Resumo</div>
     <div class="row g-2">
@@ -301,7 +276,6 @@
     </div>
   </div>
 
-  <!-- Status + ações rápidas -->
   <div class="panel-section">
     <div class="panel-section-title">Status da conta</div>
     <div class="d-flex gap-2 flex-wrap">
@@ -311,7 +285,6 @@
     </div>
   </div>
 
-  <!-- Editor de casas -->
   <div class="panel-section">
     <div class="d-flex align-items-center justify-content-between mb-2">
       <div class="panel-section-title mb-0">Casas do afiliado</div>
@@ -322,12 +295,10 @@
     </div>
   </div>
 
-  <!-- Editor de casa (form) -->
   <div class="panel-section" id="panelHouseEditor" style="display:none;">
     <div class="panel-section-title" id="panelHouseEditorTitle">Nova casa</div>
     <form id="panelHouseForm" class="row g-2">
       <input type="hidden" id="ph_id" />
-
       <div class="col-12">
         <label class="form-label">Nome da casa</label>
         <input class="form-control" id="ph_name" placeholder="Ex: BetX" />
@@ -340,9 +311,7 @@
         <label class="form-label">Link do afiliado</label>
         <input class="form-control" id="ph_affiliate_link" placeholder="https://..." />
       </div>
-
       <div class="col-12"><div class="divider-soft"></div></div>
-
       <div class="col-6">
         <label class="form-label">Modelo</label>
         <select class="form-select" id="ph_model">
@@ -363,10 +332,8 @@
         <label class="form-label">Rev (%)</label>
         <input class="form-control" id="ph_rev" type="number" step="0.01" placeholder="0" />
       </div>
-
       <div class="col-12"><div class="divider-soft"></div></div>
       <div class="col-12"><div class="panel-section-title mb-1">Comissões</div></div>
-
       <div class="col-6">
         <label class="form-label">Disponível</label>
         <input class="form-control" id="ph_commission_available" type="number" step="0.01" placeholder="0" />
@@ -383,10 +350,8 @@
         <label class="form-label">Recusado</label>
         <input class="form-control" id="ph_commission_refused" type="number" step="0.01" placeholder="0" />
       </div>
-
       <div class="col-12"><div class="divider-soft"></div></div>
       <div class="col-12"><div class="panel-section-title mb-1">Métricas</div></div>
-
       <div class="col-6">
         <label class="form-label">Cadastros</label>
         <input class="form-control" id="ph_signups" type="number" step="1" placeholder="0" />
@@ -407,27 +372,22 @@
         <label class="form-label">RevShare (R$)</label>
         <input class="form-control" id="ph_rev_amount" type="number" step="0.01" placeholder="0" />
       </div>
-
       <div class="col-12">
         <div class="form-check mt-1">
           <input class="form-check-input" type="checkbox" id="ph_active" checked>
           <label class="form-check-label" for="ph_active">Casa ativa</label>
         </div>
       </div>
-
       <div class="col-12 d-flex gap-2 mt-2">
         <button class="btn btn-primary btn-sm" type="submit" id="btnSaveHousePanel">
           <i class="mdi mdi-content-save"></i> Salvar
         </button>
-        <button class="btn btn-outline-secondary btn-sm" type="button" id="btnCancelHousePanel">
-          Cancelar
-        </button>
+        <button class="btn btn-outline-secondary btn-sm" type="button" id="btnCancelHousePanel">Cancelar</button>
       </div>
       <div class="col-12 small text-muted" id="panelHouseStatus"></div>
     </form>
   </div>
 
-  <!-- Métricas diárias -->
   <div class="panel-section">
     <div class="d-flex align-items-center justify-content-between mb-2">
       <div class="panel-section-title mb-0">Métricas diárias</div>
@@ -440,13 +400,7 @@
       <table class="table table-sm table-striped" id="panelStatsTable">
         <thead>
           <tr>
-            <th>Dia</th>
-            <th>Cads.</th>
-            <th>FTDs</th>
-            <th>QFTDs</th>
-            <th>CPA</th>
-            <th>RevShare</th>
-            <th></th>
+            <th>Dia</th><th>Cads.</th><th>FTDs</th><th>QFTDs</th><th>CPA</th><th>RevShare</th><th></th>
           </tr>
         </thead>
         <tbody>
@@ -455,10 +409,9 @@
       </table>
     </div>
   </div>
+</div>
 
-</div><!-- /editPanel -->
-
-<!-- Modal métricas dia -->
+<!-- Modal métricas -->
 <div aria-hidden="true" class="modal fade" id="editModal" tabindex="-1">
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content">
@@ -484,12 +437,31 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-4"><label class="form-label">Dia</label><input class="form-control" id="day" required type="date"/></div>
-            <div class="col-md-4"><label class="form-label">Cadastros</label><input class="form-control" id="signups" min="0" type="number" value="0"/></div>
-            <div class="col-md-4"><label class="form-label">FTDs</label><input class="form-control" id="ftds" min="0" type="number" value="0"/></div>
-            <div class="col-md-4"><label class="form-label">QFTDs (CPA)</label><input class="form-control" id="qftds_cpa" min="0" type="number" value="0"/></div>
-            <div class="col-md-4"><label class="form-label">CPA</label><input class="form-control" id="cpa_amount" min="0" step="0.01" type="number" value="0"/></div>
-            <div class="col-md-4"><label class="form-label">RevShare</label><input class="form-control" id="revshare_amount" min="0" step="0.01" type="number" value="0"/></div>
+            <div class="col-md-4">
+              <label class="form-label">Dia</label>
+              <input class="form-control" id="day" required type="date"/>
+            </div>
+            <!-- ✅ inputs sem min nem value fixo — permite digitar livremente -->
+            <div class="col-md-4">
+              <label class="form-label">Cadastros</label>
+              <input class="form-control" id="signups" type="number" placeholder="0"/>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">FTDs</label>
+              <input class="form-control" id="ftds" type="number" placeholder="0"/>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">QFTDs (CPA)</label>
+              <input class="form-control" id="qftds_cpa" type="number" placeholder="0"/>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">CPA (R$)</label>
+              <input class="form-control" id="cpa_amount" type="number" step="0.01" placeholder="0"/>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">RevShare (R$)</label>
+              <input class="form-control" id="revshare_amount" type="number" step="0.01" placeholder="0"/>
+            </div>
           </div>
           <div class="alert alert-warning mt-3 mb-0 small">Esses números aparecem no painel do afiliado. Use com atenção.</div>
         </div>
