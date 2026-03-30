@@ -498,12 +498,16 @@ async function loadPanelStats(affiliateId) {
   });
 
   tbody.querySelectorAll("[data-stat-del]").forEach(btn => {
-    btn.addEventListener("click", async () => {
+    btn.addEventListener("click", () => {
       const id = btn.dataset.statDel;
-      if (!confirm("Apagar as métricas deste dia?")) return;
-      const { error } = await supabase.from("affiliate_stats_daily").delete().eq("id", id);
-      if (error) { alert("Erro ao apagar: " + error.message); return; }
-      loadPanelStats(_currentAffiliateId);
+      setTimeout(async () => {
+        if (!confirm("Apagar as métricas deste dia?")) return;
+        btn.disabled = true;
+        const { error } = await supabase.from("affiliate_stats_daily").delete().eq("id", id);
+        btn.disabled = false;
+        if (error) { alert("Erro ao apagar: " + error.message); return; }
+        await loadPanelStats(_currentAffiliateId);
+      }, 0);
     });
   });
 }
