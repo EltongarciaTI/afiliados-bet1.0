@@ -16,6 +16,8 @@
   .brand-logo-mini img { height: 38px !important; width: auto !important; object-fit: contain !important; filter: drop-shadow(0 0 8px rgba(0,210,91,.4)) !important; }
   html, body { width: 100%; overflow-x: hidden; }
   body, .container-scroller, .page-body-wrapper, .main-panel, .content-wrapper { background: #191c24 !important; }
+  .container-scroller { display: flex !important; }
+  .page-body-wrapper { flex: 1 1 auto !important; min-width: 0 !important; }
   .main-panel, .content-wrapper { width: 100% !important; }
 
   /* ── Cards ── */
@@ -101,7 +103,11 @@
     input[type=number] { -moz-appearance: textfield; appearance: textfield; }
 
   /* ── Tabelas ── */
-  .table-responsive { border-radius: 10px; overflow: hidden; border: 1px solid rgba(255,255,255,.06); }
+  .table-responsive { border-radius: 10px; overflow-x: auto; border: 1px solid rgba(255,255,255,.06); }
+  /* Tabela dentro do painel lateral — padding menor para caber na largura */
+  #editPanel .table tbody td { padding: .45rem .5rem !important; font-size: .78rem !important; }
+  #editPanel .table thead th { padding: .5rem .5rem !important; font-size: .6rem !important; }
+  #editPanel .table-responsive { border: none; border-radius: 6px; }
   .table { margin-bottom: 0 !important; }
   .table thead tr { background: rgba(0,0,0,.22); }
   .table thead th { font-size: .65rem !important; text-transform: uppercase !important; letter-spacing: .1em !important; color: #6c7293 !important; font-weight: 700 !important; white-space: nowrap; border-bottom: 1px solid rgba(255,255,255,.08) !important; padding: .85rem 1rem !important; }
@@ -529,7 +535,7 @@
       <table class="table table-sm table-striped" id="panelStatsTable">
         <thead>
           <tr>
-            <th>Dia</th><th>Cads.</th><th>FTDs</th><th>QFTDs</th><th>CPA</th><th></th>
+            <th>Dia</th><th>Cads</th><th>FTD</th><th>QFTD</th><th>Dep.</th><th></th>
           </tr>
         </thead>
         <tbody>

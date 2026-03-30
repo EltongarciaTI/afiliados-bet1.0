@@ -19,6 +19,8 @@
   .brand-logo-mini img { height: 38px !important; width: auto !important; object-fit: contain !important; filter: drop-shadow(0 0 8px rgba(0,210,91,.4)) !important; }
   html, body { width: 100%; overflow-x: hidden; }
   body, .container-scroller, .page-body-wrapper, .main-panel, .content-wrapper { background: #191c24 !important; }
+  .container-scroller { display: flex !important; }
+  .page-body-wrapper { flex: 1 1 auto !important; min-width: 0 !important; }
   .main-panel, .content-wrapper { width: 100% !important; }
 
   /* ── Cards ── */
@@ -227,7 +229,7 @@
                     </div>
                     <div class="col-6 col-md-3">
                       <div class="kpi-comm kpi-comm--green">
-                        <div class="kpi-comm-icon"><i class="mdi mdi-cash-check"></i></div>
+                        <div class="kpi-comm-icon"><i class="mdi mdi-cash-multiple"></i></div>
                         <div><div class="kpi-comm-val" id="sumPaid">0</div><div class="kpi-comm-lbl">Pagos</div></div>
                       </div>
                     </div>

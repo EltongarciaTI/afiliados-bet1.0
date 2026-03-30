@@ -473,12 +473,18 @@ async function loadPanelStats(affiliateId) {
       <td class="small">${formatInt(r.signups)}</td>
       <td class="small">${formatInt(r.ftds)}</td>
       <td class="small">${formatInt(r.qftds_cpa)}</td>
-      <td class="small">${formatBRL(r.cpa_amount)}</td>
+      <td class="small">${formatBRL(r.deposits_amount)}</td>
       <td>
-        <button class="btn btn-sm btn-outline-primary" style="padding:.15rem .4rem;"
-                data-stat-edit="${r.day}" title="Editar dia">
-          <i class="mdi mdi-pencil" style="font-size:.8rem;"></i>
-        </button>
+        <div class="d-flex gap-1">
+          <button class="btn btn-sm btn-outline-primary" style="padding:.15rem .4rem;"
+                  data-stat-edit="${r.day}" title="Editar dia">
+            <i class="mdi mdi-pencil" style="font-size:.8rem;"></i>
+          </button>
+          <button class="btn btn-sm btn-outline-danger" style="padding:.15rem .4rem;"
+                  data-stat-del="${r.id}" title="Apagar dia">
+            <i class="mdi mdi-trash-can-outline" style="font-size:.8rem;"></i>
+          </button>
+        </div>
       </td>
     </tr>
   `).join("");
@@ -488,6 +494,16 @@ async function loadPanelStats(affiliateId) {
       const day = btn.dataset.statEdit;
       const row = rows.find(r => r.day === day);
       openMetricModal(row, "set");
+    });
+  });
+
+  tbody.querySelectorAll("[data-stat-del]").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const id = btn.dataset.statDel;
+      if (!confirm("Apagar as métricas deste dia?")) return;
+      const { error } = await supabase.from("affiliate_stats_daily").delete().eq("id", id);
+      if (error) { alert("Erro ao apagar: " + error.message); return; }
+      loadPanelStats(_currentAffiliateId);
     });
   });
 }
