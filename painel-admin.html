@@ -13,38 +13,74 @@
   <link rel="stylesheet" href="assets/css/igaming.css" />
 
   <style>
-    /* Logo sem distorção */
-    .brand-logo img { height: 32px; width: auto; max-width: 180px; object-fit: contain; }
-    .brand-logo-mini img { height: 32px; width: auto; object-fit: contain; }
+  /* ── Base ── */
+  .sidebar .sidebar-brand-wrapper { height: 74px !important; min-height: 74px !important; }
+  .brand-logo img { height: 48px !important; width: auto !important; max-width: 200px !important; object-fit: contain !important; filter: drop-shadow(0 0 10px rgba(0,210,91,.4)) !important; }
+  .brand-logo-mini img { height: 38px !important; width: auto !important; object-fit: contain !important; filter: drop-shadow(0 0 8px rgba(0,210,91,.4)) !important; }
+  html, body { width: 100%; overflow-x: hidden; }
+  body, .container-scroller, .page-body-wrapper, .main-panel, .content-wrapper { background: #191c24 !important; }
+  .main-panel, .content-wrapper { width: 100% !important; }
 
-    .action-btn { padding: .25rem .5rem; }
+  /* ── Cards ── */
+  .card { border-radius: 14px !important; border: 1px solid rgba(255,255,255,.06) !important; box-shadow: 0 4px 28px rgba(0,0,0,.28) !important; background: #1e2130 !important; }
+  .card-title { font-size: .72rem !important; font-weight: 700 !important; text-transform: uppercase !important; letter-spacing: .09em !important; color: #6c7293 !important; margin-bottom: 1.2rem !important; }
+  .card-header { background: transparent !important; border-bottom: 1px solid rgba(255,255,255,.06) !important; padding: 1.1rem 1.4rem !important; }
+  .card-category { font-size: .78rem; color: #6c7293; margin-top: .2rem; }
 
-    /* Fundo uniforme igual ao painel do Afiliado (remove "vão preto" lateral) */
-    html, body { width: 100%; overflow-x: hidden; }
-    body, .container-scroller, .page-body-wrapper, .main-panel, .content-wrapper {
-      background: #191c24 !important;
-    }
-    .main-panel { width: 100% !important; max-width: 100% !important; }
-    .content-wrapper { width: 100% !important; max-width: 100% !important; padding-right: .75rem !important; }
-    .page-body-wrapper { min-width: 100% !important; }
+  /* ── Inputs ── */
+  .form-control, .form-select, select.form-control, .input-group-text {
+    background: #252836 !important; border: 1px solid rgba(255,255,255,.08) !important; color: #e8eaed !important; border-radius: 8px !important;
+  }
+  .form-control:focus, .form-select:focus { background: #252836 !important; color: #e8eaed !important; box-shadow: 0 0 0 2px rgba(0,210,91,.2) !important; border-color: rgba(0,210,91,.5) !important; }
 
-    /* Admin mais "full width" em monitores grandes */
-    .content-wrapper { padding-left: .75rem !important; padding-right: .75rem !important; }
-    .page-body-wrapper { padding-left: 0 !important; }
+  /* ── Tabelas ── */
+  .table-responsive { border-radius: 10px; overflow: hidden; border: 1px solid rgba(255,255,255,.06); }
+  .table { margin-bottom: 0 !important; }
+  .table thead tr { background: rgba(0,0,0,.22); }
+  .table thead th { font-size: .65rem !important; text-transform: uppercase !important; letter-spacing: .1em !important; color: #6c7293 !important; font-weight: 700 !important; white-space: nowrap; border-bottom: 1px solid rgba(255,255,255,.08) !important; padding: .85rem 1rem !important; }
+  .table tbody td { padding: .75rem 1rem !important; border-color: rgba(255,255,255,.04) !important; vertical-align: middle !important; font-size: .86rem; }
+  .table-striped tbody tr:nth-of-type(odd) td { background: rgba(255,255,255,.02) !important; }
+  .table tbody tr:hover td { background: rgba(0,210,91,.05) !important; transition: background .15s; }
 
-    /* Evita "partes brancas" em inputs/plugins */
-    .form-control, .form-select, select.form-control, .input-group-text {
-      background: #2A3038 !important;
-      border-color: #2A3038 !important;
-      color: #fff !important;
-    }
-    .form-control:focus, .form-select:focus {
-      background: #2A3038 !important;
-      color: #fff !important;
-    }
+  /* ── Badges ── */
+  .badge-status { font-size: .72rem; padding: .3em .75em; border-radius: 20px; font-weight: 700; }
+  .bg-success   { background: rgba(0,210,91,.15)   !important; color: #00d25b !important; border: 1px solid rgba(0,210,91,.3)   !important; }
+  .bg-info      { background: rgba(0,144,255,.15)   !important; color: #3fb0ff !important; border: 1px solid rgba(0,144,255,.3)  !important; }
+  .bg-danger    { background: rgba(252,75,108,.15)  !important; color: #fc4b6c !important; border: 1px solid rgba(252,75,108,.3) !important; }
+  .bg-secondary { background: rgba(108,114,147,.15) !important; color: #8a8fad !important; border: 1px solid rgba(108,114,147,.3)!important; }
+  .bg-warning   { background: rgba(255,171,0,.15)   !important; color: #ffab00 !important; border: 1px solid rgba(255,171,0,.3)  !important; }
 
-    /* Espaçamento entre Link de Afiliado e Modelo de Comissão */
-    .divider-soft { border-top: 1px solid rgba(255,255,255,.06); margin: 1rem 0; }
+  /* ── Sidebar ── */
+  .sidebar { background: #161827 !important; border-right: 1px solid rgba(255,255,255,.06) !important; }
+  .sidebar .sidebar-brand-wrapper { background: #161827 !important; border-bottom: 1px solid rgba(255,255,255,.06) !important; }
+  .sidebar .nav .nav-item .nav-link { color: #6c7293 !important; border-radius: 8px !important; margin: 1px 10px !important; padding: .65rem .85rem !important; transition: background .18s, color .18s !important; }
+  .sidebar .nav .nav-item.active > .nav-link,
+  .sidebar .nav .nav-item .nav-link:hover { background: rgba(0,210,91,.1) !important; color: #00d25b !important; }
+  .sidebar .nav .nav-item.active > .nav-link .menu-icon,
+  .sidebar .nav .nav-item .nav-link:hover .menu-icon { color: #00d25b !important; }
+  .sidebar .nav .nav-item .nav-link .menu-icon { color: #6c7293 !important; }
+  .sidebar .nav .nav-item.nav-category .nav-link { font-size: .63rem !important; font-weight: 700 !important; letter-spacing: .12em !important; color: rgba(108,114,147,.5) !important; text-transform: uppercase !important; padding-top: 1.2rem !important; }
+
+  /* ── Navbar ── */
+  .navbar { background: #161827 !important; border-bottom: 1px solid rgba(255,255,255,.06) !important; box-shadow: 0 2px 20px rgba(0,0,0,.3) !important; }
+  .navbar .navbar-menu-wrapper { background: #161827 !important; border-left: 1px solid rgba(255,255,255,.06) !important; }
+  .navbar .navbar-brand-wrapper { background: #161827 !important; }
+  .navbar .nav-link { color: #6c7293 !important; }
+  .navbar .nav-link:hover { color: #e8eaed !important; }
+
+  /* ── Footer ── */
+  .footer { background: #161827 !important; border-top: 1px solid rgba(255,255,255,.06) !important; }
+  .footer .text-muted { color: rgba(108,114,147,.7) !important; font-size: .8rem !important; }
+  .footer .footer-credit a { color: rgba(108,114,147,.7) !important; transition: color .18s; }
+  .footer .footer-credit a:hover { color: #00d25b !important; }
+
+  /* ── Misc ── */
+  .divider-soft { border-top: 1px solid rgba(255,255,255,.06); margin: 1rem 0; }
+  .breadcrumb { background: transparent !important; }
+  .breadcrumb-item a { color: #6c7293; }
+  .breadcrumb-item.active { color: #e8eaed; }
+  .breadcrumb-item + .breadcrumb-item::before { color: #6c7293; }
+  .action-btn { padding: .25rem .5rem; }
 </style>
 </head>
 <body>

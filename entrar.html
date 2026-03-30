@@ -14,35 +14,55 @@
   <link rel="stylesheet" href="assets/afnex/notifications.css">
 
   <style>
-    /* pequeno ajuste: link admin */
-    .admin-access {
-      margin-top: 14px;
-      display:flex;
-      justify-content:center;
-      gap:10px;
-      flex-wrap:wrap;
+    .login-box {
+      background: #1e2130 !important;
+      border: 1px solid rgba(255,255,255,.07) !important;
+      box-shadow: 0 8px 40px rgba(0,0,0,.5) !important;
     }
-    .admin-access a{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      font-weight:600;
-      font-size:.92rem;
-      color:#cfd6ff;
-      text-decoration:none;
-      opacity:.95;
+    .login-logo .logo-img {
+      filter: drop-shadow(0 0 12px rgba(0,210,91,.4));
     }
-    .admin-access a:hover{ opacity:1; text-decoration:underline; }
-    .admin-lock{
-      width:18px;height:18px; display:inline-block;
+    .login-title {
+      font-size: 1.4rem !important;
+      font-weight: 700 !important;
+      color: #e8eaed !important;
+      text-align: center;
+      margin-bottom: .25rem !important;
     }
-    .form-message{
-      margin-top: 12px;
-      font-size: .95rem;
-      color: #ffb4b4;
-      min-height: 18px;
-      text-align:center;
+    .login-form label { color: #6c7293 !important; font-size: .72rem !important; font-weight: 700 !important; text-transform: uppercase; letter-spacing: .07em; }
+    .login-form input {
+      background: #252836 !important;
+      border: 1px solid rgba(255,255,255,.08) !important;
+      color: #e8eaed !important;
+      border-radius: 10px !important;
+      padding: .8rem 1rem !important;
+      transition: border-color .2s, box-shadow .2s;
     }
+    .login-form input:focus {
+      border-color: rgba(0,210,91,.5) !important;
+      box-shadow: 0 0 0 3px rgba(0,210,91,.12) !important;
+      outline: none;
+    }
+    .btn-primary.btn-login, button[type=submit] {
+      background: linear-gradient(135deg, #00d25b, #00b34a) !important;
+      border: none !important;
+      border-radius: 10px !important;
+      font-weight: 700 !important;
+      font-size: .95rem !important;
+      padding: .85rem !important;
+      box-shadow: 0 4px 18px rgba(0,210,91,.35) !important;
+      color: #fff !important;
+      transition: opacity .2s !important;
+    }
+    .btn-primary.btn-login:hover, button[type=submit]:hover { opacity: .9 !important; }
+    .admin-access { margin-top: 14px; display:flex; justify-content:center; gap:10px; flex-wrap:wrap; }
+    .admin-access a { display:inline-flex; align-items:center; gap:6px; font-weight:600; font-size:.85rem; color:rgba(108,114,147,.8); text-decoration:none; transition:color .2s; }
+    .admin-access a:hover { color: #00d25b; }
+    .admin-lock { width:16px; height:16px; display:inline-block; }
+    .form-message { margin-top:12px; font-size:.88rem; color:#fc4b6c; min-height:18px; text-align:center; }
+    .login-footer { text-align:center; font-size:.83rem; color:#6c7293; margin-top:1rem; }
+    .login-footer a { color:#00d25b; text-decoration:none; font-weight:600; }
+    .login-footer a:hover { text-decoration:underline; }
   </style>
 </head>
 <body>

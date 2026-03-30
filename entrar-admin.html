@@ -14,37 +14,67 @@
   <link rel="stylesheet" href="assets/afnex/notifications.css">
 
   <style>
-    .admin-badge{
-      margin: 10px auto 0;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      gap:10px;
-      color:#cfd6ff;
-      font-weight:600;
-      font-size:.95rem;
-      opacity:.95;
+    .login-box {
+      background: #1e2130 !important;
+      border: 1px solid rgba(255,255,255,.07) !important;
+      box-shadow: 0 8px 40px rgba(0,0,0,.5) !important;
     }
-    .admin-badge svg{ width:18px; height:18px; }
-    .form-message{
-      margin-top: 12px;
-      font-size: .95rem;
-      color: #ffb4b4;
-      min-height: 18px;
-      text-align:center;
+    .login-logo .logo-img {
+      filter: drop-shadow(0 0 12px rgba(0,210,91,.4));
     }
-    .back-affiliate{
-      margin-top: 14px;
-      display:flex;
-      justify-content:center;
+    .login-title {
+      font-size: 1.4rem !important;
+      font-weight: 700 !important;
+      color: #e8eaed !important;
+      text-align: center;
+      margin-bottom: .25rem !important;
     }
-    .back-affiliate a{
-      color:#cfd6ff;
-      font-weight:600;
-      text-decoration:none;
-      opacity:.95;
+    .login-form label { color: #6c7293 !important; font-size: .72rem !important; font-weight: 700 !important; text-transform: uppercase; letter-spacing: .07em; }
+    .login-form input {
+      background: #252836 !important;
+      border: 1px solid rgba(255,255,255,.08) !important;
+      color: #e8eaed !important;
+      border-radius: 10px !important;
+      padding: .8rem 1rem !important;
+      transition: border-color .2s, box-shadow .2s;
     }
-    .back-affiliate a:hover{ opacity:1; text-decoration:underline; }
+    .login-form input:focus {
+      border-color: rgba(0,210,91,.5) !important;
+      box-shadow: 0 0 0 3px rgba(0,210,91,.12) !important;
+      outline: none;
+    }
+    .btn-primary.btn-login, button[type=submit] {
+      background: linear-gradient(135deg, #00d25b, #00b34a) !important;
+      border: none !important;
+      border-radius: 10px !important;
+      font-weight: 700 !important;
+      font-size: .95rem !important;
+      padding: .85rem !important;
+      box-shadow: 0 4px 18px rgba(0,210,91,.35) !important;
+      color: #fff !important;
+      transition: opacity .2s !important;
+    }
+    .btn-primary.btn-login:hover, button[type=submit]:hover { opacity: .9 !important; }
+    .admin-badge {
+      margin: 8px auto 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 7px;
+      background: rgba(0,210,91,.08);
+      border: 1px solid rgba(0,210,91,.2);
+      border-radius: 20px;
+      padding: .35rem .9rem;
+      width: fit-content;
+      color: #00d25b;
+      font-weight: 600;
+      font-size: .82rem;
+    }
+    .admin-badge svg { width: 15px; height: 15px; stroke: #00d25b; }
+    .form-message { margin-top:12px; font-size:.88rem; color:#fc4b6c; min-height:18px; text-align:center; }
+    .back-affiliate { margin-top:14px; display:flex; justify-content:center; }
+    .back-affiliate a { color:#6c7293; font-weight:600; text-decoration:none; font-size:.85rem; transition:color .2s; }
+    .back-affiliate a:hover { color:#00d25b; }
   </style>
 </head>
 <body>
