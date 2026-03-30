@@ -251,7 +251,7 @@ async function loadPanelData(affiliateId) {
   await loadPanelStats(affiliateId);
 
   const { data: pendingPayouts } = await supabase
-    .from("payouts")
+    .from("payout_requests")
     .select("id")
     .eq("affiliate_id", affiliateId)
     .eq("status", "requested");
