@@ -500,14 +500,28 @@ async function loadPanelStats(affiliateId) {
   tbody.querySelectorAll("[data-stat-del]").forEach(btn => {
     btn.addEventListener("click", () => {
       const id = btn.dataset.statDel;
-      setTimeout(async () => {
-        if (!confirm("Apagar as métricas deste dia?")) return;
-        btn.disabled = true;
-        const { error } = await supabase.from("affiliate_stats_daily").delete().eq("id", id);
-        btn.disabled = false;
-        if (error) { alert("Erro ao apagar: " + error.message); return; }
+      const cell = btn.closest("td");
+      // Troca o botão por confirmação inline (sem confirm() bloqueante)
+      cell.innerHTML = `
+        <div class="d-flex gap-1 align-items-center">
+          <span class="small text-muted" style="font-size:.72rem;">Apagar?</span>
+          <button class="btn btn-sm btn-danger js-del-confirm" style="padding:.15rem .45rem;font-size:.75rem;">Sim</button>
+          <button class="btn btn-sm btn-outline-secondary js-del-cancel" style="padding:.15rem .45rem;font-size:.75rem;">Não</button>
+        </div>`;
+      cell.querySelector(".js-del-cancel").addEventListener("click", () => {
+        loadPanelStats(_currentAffiliateId);
+      });
+      cell.querySelector(".js-del-confirm").addEventListener("click", async () => {
+        cell.innerHTML = `<span class="small text-muted">Apagando…</span>`;
+        const { error } = await supabase
+          .from("affiliate_stats_daily")
+          .delete()
+          .eq("id", id);
+        if (error) {
+          alert("Erro ao apagar: " + error.message);
+        }
         await loadPanelStats(_currentAffiliateId);
-      }, 0);
+      });
     });
   });
 }
