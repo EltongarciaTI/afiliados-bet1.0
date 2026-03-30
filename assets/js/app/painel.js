@@ -117,9 +117,27 @@ async function init() {
     document.body.prepend(bar);
   }
 
+  // Se owner acessou com ?affiliate=ID, carrega dados daquele afiliado
+  const affiliateParam = url.searchParams.get("affiliate");
+  let viewProfile = profile;
+  if (role === "owner" && affiliateParam && affiliateParam !== user.id) {
+    const { data: ap } = await supabase
+      .from("profiles")
+      .select("name, full_name, email, link_marcha")
+      .eq("id", affiliateParam)
+      .maybeSingle();
+    if (ap) viewProfile = ap;
+
+    const bar = document.querySelector("body > div[style*='sticky']");
+    if (bar) {
+      const nameLabel = bar.querySelector("span");
+      if (nameLabel) nameLabel.textContent = `🔎 Modo Admin — vendo como: ${ap?.full_name || ap?.name || ap?.email || affiliateParam}`;
+    }
+  }
+
   // Link base do perfil (fallback caso não haja casa configurada)
-  const profileLink = (profile?.link_marcha && String(profile.link_marcha).trim())
-    ? String(profile.link_marcha).trim()
+  const profileLink = (viewProfile?.link_marcha && String(viewProfile.link_marcha).trim())
+    ? String(viewProfile.link_marcha).trim()
     : "";
 
   const linkInput = qs("affiliateLink");
@@ -131,9 +149,14 @@ async function init() {
   const bBaseline = qs("badgeBaseline");
   const housesBox = qs("housesList");
 
+  // ID do afiliado a visualizar (owner pode ver como outro afiliado via ?affiliate=ID)
+  const affiliateId = (role === "owner" && affiliateParam && affiliateParam !== user.id)
+    ? affiliateParam
+    : user.id;
+
   let houses = [];
   try {
-    houses = await fetchHouses(user.id);
+    houses = await fetchHouses(affiliateId);
   } catch {
     houses = [];
   }
@@ -209,8 +232,6 @@ async function init() {
     window.location.href = "entrar.html";
   });
 
-  // Load data for current user (affiliate view)
-  const affiliateId = user.id;
   const data = await fetchDashboardData(affiliateId);
 
   // Filtro por casa (opcional): ?house=<affiliate_houses.id>
@@ -263,11 +284,8 @@ async function init() {
         <td>${safeDate(r.day)}</td>
         <td>${formatInt(r.signups)}</td>
         <td>${formatInt(r.ftds)}</td>
-        <td>${formatBRL(r.ftd_amount)}</td>
         <td>${formatInt(r.qftds_cpa)}</td>
-        <td>${formatBRL(r.cpa_amount)}</td>
         <td>${formatBRL(r.deposits_amount)}</td>
-        <td>${formatBRL(r.revshare_amount)}</td>
       `;
       tbody.appendChild(tr);
     }
@@ -330,20 +348,18 @@ async function init() {
 
   // Monthly chart (Area Chart)
   const ranges = getMonthRanges();
-  const labels = ["Cadastros", "FTDs", "Depósitos", "CPA", "RevShare"];
+  const labels = ["Cadastros", "FTDs", "Depósitos", "QFTD"];
   const lastData = [
     data.lastMonth.signups,
     data.lastMonth.ftds,
     data.lastMonth.deposits_amount,
-    data.lastMonth.cpa_amount,
-    data.lastMonth.revshare_amount,
+    data.lastMonth.qftds_cpa,
   ];
   const thisData = [
     data.thisMonth.signups,
     data.thisMonth.ftds,
     data.thisMonth.deposits_amount,
-    data.thisMonth.cpa_amount,
-    data.thisMonth.revshare_amount,
+    data.thisMonth.qftds_cpa,
   ];
 
   const ctx = document.getElementById("monthlyChart");

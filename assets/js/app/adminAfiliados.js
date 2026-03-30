@@ -215,8 +215,47 @@ async function loadPanelData(affiliateId) {
   if (panelAvatar) panelAvatar.textContent = initials;
   setText("panelName",  p.full_name || p.name || "(sem nome)");
   setText("panelEmail", p.email || "—");
+
+  const btnVerPainel = $("btnVerPainel");
+  if (btnVerPainel) {
+    btnVerPainel.href = `painel.html?as=affiliate&affiliate=${affiliateId}&return=admin-afiliados.html`;
+  }
+
+  const waLink = $("panelWhatsapp");
+  const waNum  = $("panelWhatsappNum");
+  if (waLink && waNum) {
+    if (p.whatsapp) {
+      const clean = String(p.whatsapp).trim().replace(/[^\d]/g, "");
+      waLink.href = `https://wa.me/${clean}`;
+      waNum.textContent = p.whatsapp;
+      waLink.style.display = "flex";
+    } else {
+      waLink.style.display = "none";
+    }
+  }
+
+  const igLink = $("panelInstagram");
+  const igUser = $("panelInstagramUser");
+  if (igLink && igUser) {
+    if (p.instagram) {
+      const clean = String(p.instagram).replace(/^@/, "");
+      igLink.href = `https://instagram.com/${clean}`;
+      igUser.textContent = "@" + clean;
+      igLink.style.display = "flex";
+    } else {
+      igLink.style.display = "none";
+    }
+  }
+
   await loadPanelHouses(affiliateId);
   await loadPanelStats(affiliateId);
+
+  const { data: pendingPayouts } = await supabase
+    .from("payouts")
+    .select("id")
+    .eq("affiliate_id", affiliateId)
+    .eq("status", "requested");
+  setText("pSaquesPendentes", (pendingPayouts || []).length);
 }
 
 // ─────────────────────────────────────────
@@ -228,7 +267,7 @@ async function loadPanelHouses(affiliateId) {
     .select(`id, house_name, house_link, affiliate_link,
       comissao_modelo, baseline, cpa, rev,
       commission_available, commission_requested, commission_paid, commission_refused,
-      total_signups, total_ftds, total_cpa_amount, total_revshare_amount,
+      total_signups, total_ftds, total_qftds_cpa, total_cpa_amount, total_deposits_amount, total_revshare_amount,
       is_active, created_at`)
     .eq("affiliate_id", affiliateId)
     .order("created_at", { ascending: false });
@@ -236,9 +275,8 @@ async function loadPanelHouses(affiliateId) {
   if (error) { console.error("Erro ao carregar casas:", error); return; }
 
   _currentHouses = data || [];
-  setText("pCasas",   _currentHouses.length);
-  setText("pSignups", _currentHouses.reduce((a, h) => a + num(h.total_signups), 0));
-  setText("pFTDs",    _currentHouses.reduce((a, h) => a + num(h.total_ftds), 0));
+  setText("pCasas",  _currentHouses.length);
+  setText("pQFTDs",  _currentHouses.reduce((a, h) => a + num(h.total_qftds_cpa), 0));
   renderPanelHouses(_currentHouses);
 }
 
@@ -327,7 +365,7 @@ function clearPanelHouseForm() {
   setVal("ph_model", "cpa");
   ["ph_baseline","ph_cpa","ph_rev",
    "ph_commission_available","ph_commission_requested","ph_commission_paid","ph_commission_refused",
-   "ph_signups","ph_ftds","ph_qftds_cpa","ph_cpa_amount","ph_rev_amount"].forEach(id => setVal(id, ""));
+   "ph_signups","ph_ftds","ph_qftds_cpa","ph_cpa_amount","ph_deposits_amount","ph_rev_amount"].forEach(id => setVal(id, ""));
   const chk = $("ph_active");
   if (chk) chk.checked = true;
   setText("panelHouseStatus", "");
@@ -350,6 +388,7 @@ function fillPanelHouseForm(h) {
   setVal("ph_ftds",                 h.total_ftds ?? "");
   setVal("ph_qftds_cpa",            h.total_qftds_cpa ?? "");
   setVal("ph_cpa_amount",           h.total_cpa_amount ?? "");
+  setVal("ph_deposits_amount",      h.total_deposits_amount ?? "");
   setVal("ph_rev_amount",           h.total_revshare_amount ?? "");
   const chk = $("ph_active");
   if (chk) chk.checked = !!h.is_active;
@@ -375,6 +414,7 @@ function readPanelHouseForm() {
     total_ftds:            num(getVal("ph_ftds")),
     total_qftds_cpa:       num(getVal("ph_qftds_cpa")),
     total_cpa_amount:      num(getVal("ph_cpa_amount")),
+    total_deposits_amount: num(getVal("ph_deposits_amount")),
     total_revshare_amount: num(getVal("ph_rev_amount")),
     is_active:             chk ? !!chk.checked : true,
   };
@@ -410,20 +450,20 @@ async function loadPanelStats(affiliateId) {
   const ranges = getMonthRanges();
   const { data, error } = await supabase
     .from("affiliate_stats_daily")
-    .select("id, day, signups, ftds, qftds_cpa, cpa_amount, revshare_amount")
+    .select("id, day, signups, ftds, qftds_cpa, deposits_amount, revshare_amount")
     .eq("affiliate_id", affiliateId)
     .gte("day", ranges.thisMonth.from)
     .lte("day", ranges.thisMonth.to)
     .order("day", { ascending: false });
 
   if (error) {
-    tbody.innerHTML = `<tr><td colspan="7" class="text-muted small">Erro ao carregar métricas.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="6" class="text-muted small">Erro ao carregar métricas.</td></tr>`;
     return;
   }
 
   const rows = data || [];
   if (!rows.length) {
-    tbody.innerHTML = `<tr><td colspan="7" class="text-muted small text-center py-2">Sem métricas este mês.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="6" class="text-muted small text-center py-2">Sem métricas este mês.</td></tr>`;
     return;
   }
 
@@ -434,7 +474,6 @@ async function loadPanelStats(affiliateId) {
       <td class="small">${formatInt(r.ftds)}</td>
       <td class="small">${formatInt(r.qftds_cpa)}</td>
       <td class="small">${formatBRL(r.cpa_amount)}</td>
-      <td class="small">${formatBRL(r.revshare_amount)}</td>
       <td>
         <button class="btn btn-sm btn-outline-primary" style="padding:.15rem .4rem;"
                 data-stat-edit="${r.day}" title="Editar dia">
@@ -477,13 +516,13 @@ function openMetricModal(row, mode = "add") {
     setVal("signups",         num(row.signups));
     setVal("ftds",            num(row.ftds));
     setVal("qftds_cpa",       num(row.qftds_cpa));
-    setVal("cpa_amount",      num(row.cpa_amount));
+    setVal("deposits_amount", num(row.deposits_amount));
     setVal("revshare_amount", num(row.revshare_amount));
   } else {
     const d = new Date();
     setVal("day", `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`);
     // ✅ Limpa os campos para permitir digitação livre
-    ["signups","ftds","qftds_cpa","cpa_amount","revshare_amount"].forEach(k => setVal(k, ""));
+    ["signups","ftds","qftds_cpa","deposits_amount","revshare_amount"].forEach(k => setVal(k, ""));
   }
 
   if (window.$) window.$("#editModal").modal("show");
@@ -498,8 +537,8 @@ async function upsertDay(affiliateId, mode = "add") {
     ftds:            num(getVal("ftds")),
     ftd_amount:      0,
     qftds_cpa:       num(getVal("qftds_cpa")),
-    cpa_amount:      num(getVal("cpa_amount")),
-    deposits_amount: 0,
+    cpa_amount:      0,
+    deposits_amount: num(getVal("deposits_amount")),
     revshare_amount: num(getVal("revshare_amount")),
   };
 
@@ -519,8 +558,8 @@ async function upsertDay(affiliateId, mode = "add") {
         ftds:            num(existing.ftds)            + input.ftds,
         ftd_amount:      num(existing.ftd_amount),
         qftds_cpa:       num(existing.qftds_cpa)       + input.qftds_cpa,
-        cpa_amount:      num(existing.cpa_amount)      + input.cpa_amount,
-        deposits_amount: num(existing.deposits_amount),
+        cpa_amount:      num(existing.cpa_amount),
+        deposits_amount: num(existing.deposits_amount) + input.deposits_amount,
         revshare_amount: num(existing.revshare_amount) + input.revshare_amount,
       };
     }
@@ -663,6 +702,7 @@ async function init() {
         total_ftds:            h.total_ftds,
         total_qftds_cpa:       h.total_qftds_cpa,
         total_cpa_amount:      h.total_cpa_amount,
+        total_deposits_amount: h.total_deposits_amount,
         total_revshare_amount: h.total_revshare_amount,
         is_active:             h.is_active,
       };

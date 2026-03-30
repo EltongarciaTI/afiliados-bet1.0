@@ -6,112 +6,43 @@
   <title>Afiliados Bet | Dashboard</title>
   <link rel="icon" type="image/png" href="assets/afnex/images/favi.png">
 
-  <!-- Corona (paleta exata) -->
   <link rel="stylesheet" href="assets/corona/vendors/mdi/css/materialdesignicons.min.css" />
   <link rel="stylesheet" href="assets/corona/vendors/css/vendor.bundle.base.css" />
   <link rel="stylesheet" href="assets/corona/css/style.css" />
   <link rel="stylesheet" href="assets/css/igaming.css" />
 
-  <!-- Pequenos ajustes de marca (sem alterar paleta) -->
   <style>
-    .brand-logo img { height: 32px; width: auto; max-width: 180px; object-fit: contain; }
-    .brand-logo-mini img { height: 32px; width: auto; object-fit: contain; }
-    .table thead th { white-space: nowrap; }
-    .badge-status { font-size: .78rem; }
-    .card .card-title { margin-bottom: .75rem; }
-    .link-input { background: #2A3038; border-color: #2A3038; color: #fff; }
-    .link-input:focus { background: #2A3038; color: #fff; }
-    .btn-icon-text i { margin-right: .4rem; }
-    /* Evita “manchas brancas” de plugins externos */
-    .dataTables_wrapper .dataTables_filter input,
-    .dataTables_wrapper .dataTables_length select {
-      background: #2A3038 !important;
-      border: 1px solid #2A3038 !important;
-      color: #fff !important;
-    }
-    .dataTables_wrapper .dataTables_paginate .paginate_button {
-      color: #fff !important;
+    /* ── Base ── */
+    .sidebar .sidebar-brand-wrapper { height: 74px !important; min-height: 74px !important; }
+    .brand-logo img { height: 48px !important; width: auto !important; max-width: 200px !important; object-fit: contain !important; filter: drop-shadow(0 0 10px rgba(0,210,91,.4)) !important; }
+    .brand-logo-mini img { height: 38px !important; width: auto !important; object-fit: contain !important; filter: drop-shadow(0 0 8px rgba(0,210,91,.4)) !important; }
+    html, body { width: 100%; overflow-x: hidden; }
+    body, .container-scroller, .page-body-wrapper, .main-panel, .content-wrapper {
+      background: #191c24 !important;
     }
 
-    /* DataTables: PT-BR + look Corona (evita botões claros) */
-    .dataTables_wrapper .dataTables_info,
-    .dataTables_wrapper .dataTables_length label,
-    .dataTables_wrapper .dataTables_filter label {
+    /* ── Cards ── */
+    .card {
+      border-radius: 14px !important;
+      border: 1px solid rgba(255,255,255,.06) !important;
+      box-shadow: 0 4px 28px rgba(0,0,0,.28) !important;
+      background: #1e2130 !important;
+    }
+    .card-title {
+      font-size: .72rem !important;
+      font-weight: 700 !important;
+      text-transform: uppercase !important;
+      letter-spacing: .09em !important;
       color: #6c7293 !important;
-      font-size: .9rem;
-    }
-    .dataTables_wrapper .dataTables_paginate {
-      margin-top: .75rem;
-    }
-    .dataTables_wrapper .dataTables_paginate .paginate_button {
-      background: transparent !important;
-      border: 1px solid rgba(108, 114, 147, .35) !important;
-      border-radius: .35rem !important;
-      padding: .35rem .6rem !important;
-      margin: 0 .15rem !important;
-      font-weight: 600;
-      font-family: inherit;
-    }
-    .dataTables_wrapper .dataTables_paginate .paginate_button.current,
-    .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
-      background: rgba(0, 210, 91, .15) !important;
-      border-color: rgba(0, 210, 91, .55) !important;
-      color: #fff !important;
-    }
-    .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-      background: rgba(255, 171, 0, .12) !important;
-      border-color: rgba(255, 171, 0, .55) !important;
-      color: #fff !important;
+      margin-bottom: 1.35rem !important;
     }
 
-    /* Comissões: destaque com a paleta do Corona (sem “branco estranho”) */
-    .card--commission {
-      background: linear-gradient(180deg, rgba(0, 210, 91, .10) 0%, rgba(25, 28, 36, 0) 55%) !important;
-      border: 1px solid rgba(0, 210, 91, .18) !important;
-    }
-    .card--commission .badge-outline-light {
-      border-color: rgba(108,114,147,.45) !important;
-      color: #c9c9d6 !important;
-    }
-
-    /* KPI cards (Comissões): ícone à esquerda + alinhamento consistente */
-    .ab-metric{ gap: .85rem; }
-    .ab-metric-icon{
-      width: 46px;
-      height: 46px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: .65rem;
-      background: rgba(255,255,255,.04);
-      flex: 0 0 46px;
-    }
-    .ab-metric-icon i{ font-size: 1.85rem; }
-    .ab-metric-text .text-muted{ line-height: 1.05; }
-
-    /* Destaque para CPA + Baseline */
-    .badge-kpi{ font-weight: 700; }
-    .badge-kpi--cpa{
-      background: rgba(0, 210, 91, .16) !important;
-      border: 1px solid rgba(0, 210, 91, .45) !important;
-      color: #fff !important;
-    }
-    .badge-kpi--baseline{
-      background: rgba(255, 171, 0, .14) !important;
-      border: 1px solid rgba(255, 171, 0, .45) !important;
-      color: #fff !important;
-    }
-
-    /* ── Seletor de casa moderno ── */
+    /* ── Seletor de casa ── */
     .ab-house-selector {
-      display: flex;
-      align-items: center;
-      gap: 0;
-      background: #2A3038;
+      display: flex; align-items: center; gap: 0;
+      background: #252836;
       border: 1px solid rgba(0,210,91,.35);
-      border-radius: .55rem;
-      overflow: hidden;
-      min-width: 240px;
+      border-radius: 8px; overflow: hidden; min-width: 220px;
       transition: border-color .2s, box-shadow .2s;
     }
     .ab-house-selector:focus-within {
@@ -119,41 +50,209 @@
       box-shadow: 0 0 0 3px rgba(0,210,91,.1);
     }
     .ab-house-selector-label {
-      padding: .45rem .75rem;
-      font-size: .8rem;
-      font-weight: 600;
-      color: #00d25b;
-      background: rgba(0,210,91,.08);
+      padding: .42rem .7rem; font-size: .78rem; font-weight: 700;
+      color: #00d25b; background: rgba(0,210,91,.09);
       border-right: 1px solid rgba(0,210,91,.2);
-      white-space: nowrap;
-      display: flex;
-      align-items: center;
-      gap: .35rem;
+      white-space: nowrap; display: flex; align-items: center; gap: .3rem;
     }
     .ab-house-select {
-      flex: 1;
-      background: transparent !important;
-      border: none !important;
-      color: #e8eaed !important;
-      padding: .45rem .75rem;
-      font-size: .88rem;
-      font-weight: 500;
-      cursor: pointer;
-      outline: none;
-      appearance: none;
-      -webkit-appearance: none;
+      flex: 1; background: transparent !important; border: none !important;
+      color: #e8eaed !important; padding: .42rem .7rem; font-size: .86rem;
+      font-weight: 500; cursor: pointer; outline: none;
+      appearance: none; -webkit-appearance: none;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236c7293' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") !important;
       background-repeat: no-repeat !important;
-      background-position: right .75rem center !important;
+      background-position: right .7rem center !important;
       padding-right: 2rem;
     }
-    .ab-house-select option { background: #2A3038; color: #e8eaed; }
+    .ab-house-select option { background: #252836; color: #e8eaed; }
+
+    /* ── Badges CPA / Baseline ── */
+    .badge-kpi { font-weight: 700; }
+    .badge-kpi--cpa {
+      background: rgba(0,210,91,.14) !important;
+      border: 1px solid rgba(0,210,91,.4) !important; color: #00d25b !important;
+    }
+    .badge-kpi--baseline {
+      background: rgba(255,171,0,.13) !important;
+      border: 1px solid rgba(255,171,0,.4) !important; color: #ffab00 !important;
+    }
+
+    /* ── KPI Comissões ── */
+    .kpi-comm {
+      border-radius: 12px; padding: 1.1rem 1.2rem;
+      display: flex; align-items: center; gap: .9rem;
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.06);
+      transition: transform .18s, box-shadow .18s;
+    }
+    .kpi-comm:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(0,0,0,.35); }
+    .kpi-comm-icon {
+      width: 46px; height: 46px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.45rem; flex: 0 0 46px;
+    }
+    .kpi-comm-val { font-size: 1.18rem; font-weight: 800; line-height: 1.1; color: #fff; }
+    .kpi-comm-lbl { font-size: .7rem; color: #6c7293; margin-top: .18rem; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; }
+
+    .kpi-comm--green { border-left: 3px solid #00d25b; }
+    .kpi-comm--green .kpi-comm-icon { background: rgba(0,210,91,.12); color: #00d25b; }
+    .kpi-comm--yellow { border-left: 3px solid #ffab00; }
+    .kpi-comm--yellow .kpi-comm-icon { background: rgba(255,171,0,.12); color: #ffab00; }
+    .kpi-comm--blue { border-left: 3px solid #0090ff; }
+    .kpi-comm--blue .kpi-comm-icon { background: rgba(0,144,255,.12); color: #0090ff; }
+    .kpi-comm--red { border-left: 3px solid #fc4b6c; }
+    .kpi-comm--red .kpi-comm-icon { background: rgba(252,75,108,.12); color: #fc4b6c; }
+
+    /* ── Cards de Métrica ── */
+    .metric-card {
+      border-radius: 14px; padding: 1.4rem 1rem 1.2rem;
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.06);
+      text-align: center; position: relative; overflow: hidden;
+      transition: transform .18s, box-shadow .18s;
+    }
+    .metric-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #00d25b 0%, #0090ff 100%);
+    }
+    .metric-card:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(0,0,0,.35); }
+    .metric-icon {
+      width: 54px; height: 54px; border-radius: 50%;
+      background: rgba(0,210,91,.09); border: 1px solid rgba(0,210,91,.2);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto .85rem;
+    }
+    .metric-value {
+      font-size: 1.75rem; font-weight: 800; line-height: 1; color: #fff; margin-bottom: .35rem;
+    }
+    .metric-label {
+      font-size: .7rem; color: #6c7293;
+      text-transform: uppercase; letter-spacing: .07em; font-weight: 700;
+    }
+
+    /* ── Link do afiliado ── */
+    .link-input { background: #252836 !important; border-color: #252836 !important; color: #fff !important; border-radius: 8px 0 0 8px !important; }
+    .link-input:focus { background: #252836 !important; color: #fff !important; }
+    .btn-icon-text i { margin-right: .4rem; }
+
+    /* ── Tabelas modernas ── */
+    .table-responsive {
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.06);
+    }
+    .table { margin-bottom: 0 !important; }
+    .table thead tr { background: rgba(0,0,0,.22); }
+    .table thead th {
+      font-size: .65rem !important; text-transform: uppercase !important;
+      letter-spacing: .1em !important; color: #6c7293 !important;
+      font-weight: 700 !important; white-space: nowrap;
+      border-bottom: 1px solid rgba(255,255,255,.08) !important;
+      padding: .85rem 1rem !important;
+    }
+    .table tbody td {
+      padding: .75rem 1rem !important;
+      border-color: rgba(255,255,255,.04) !important;
+      vertical-align: middle !important;
+      font-size: .86rem;
+    }
+    .table-striped tbody tr:nth-of-type(odd) td { background: rgba(255,255,255,.02) !important; }
+    .table tbody tr:hover td { background: rgba(0,210,91,.05) !important; transition: background .15s; }
+
+    /* ── Badges de status ── */
+    .badge-status { font-size: .72rem; padding: .3em .75em; border-radius: 20px; font-weight: 700; }
+    .bg-success  { background: rgba(0,210,91,.15)   !important; color: #00d25b !important; border: 1px solid rgba(0,210,91,.3)   !important; }
+    .bg-info     { background: rgba(0,144,255,.15)   !important; color: #3fb0ff !important; border: 1px solid rgba(0,144,255,.3)  !important; }
+    .bg-danger   { background: rgba(252,75,108,.15)  !important; color: #fc4b6c !important; border: 1px solid rgba(252,75,108,.3) !important; }
+    .bg-secondary{ background: rgba(108,114,147,.15) !important; color: #8a8fad !important; border: 1px solid rgba(108,114,147,.3)!important; }
+
+    /* ── DataTables ── */
+    .dataTables_wrapper .dataTables_filter input,
+    .dataTables_wrapper .dataTables_length select {
+      background: #252836 !important; border: 1px solid rgba(255,255,255,.08) !important; color: #fff !important;
+      border-radius: 6px !important;
+    }
+    .dataTables_wrapper .dataTables_info,
+    .dataTables_wrapper .dataTables_length label,
+    .dataTables_wrapper .dataTables_filter label { color: #6c7293 !important; font-size: .85rem; }
+    .dataTables_wrapper .dataTables_paginate { margin-top: .75rem; }
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+      background: transparent !important; border: 1px solid rgba(108,114,147,.3) !important;
+      border-radius: 6px !important; padding: .32rem .58rem !important; margin: 0 .12rem !important;
+      font-weight: 600; color: #fff !important;
+    }
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+      background: rgba(0,210,91,.14) !important; border-color: rgba(0,210,91,.5) !important; color: #fff !important;
+    }
+    .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+      background: rgba(255,171,0,.1) !important; border-color: rgba(255,171,0,.45) !important; color: #fff !important;
+    }
+
+    /* ── Badge status pagamentos ── */
+    .badge-status { font-size: .72rem; padding: .28em .6em; border-radius: 20px; font-weight: 700; }
+    /* ── Sidebar ── */
+    .sidebar { background: #161827 !important; border-right: 1px solid rgba(255,255,255,.06) !important; }
+    .sidebar .sidebar-brand-wrapper { background: #161827 !important; border-bottom: 1px solid rgba(255,255,255,.06) !important; }
+    .sidebar .nav .nav-item .nav-link {
+      color: #6c7293 !important; border-radius: 8px !important;
+      margin: 1px 10px !important; padding: .65rem .85rem !important;
+      transition: background .18s, color .18s !important;
+    }
+    .sidebar .nav .nav-item.active > .nav-link,
+    .sidebar .nav .nav-item .nav-link:hover {
+      background: rgba(0,210,91,.1) !important; color: #00d25b !important;
+    }
+    .sidebar .nav .nav-item.active > .nav-link .menu-icon,
+    .sidebar .nav .nav-item .nav-link:hover .menu-icon { color: #00d25b !important; }
+    .sidebar .nav .nav-item .nav-link .menu-icon { color: #6c7293 !important; }
+    .sidebar .nav .nav-item.nav-category .nav-link {
+      font-size: .63rem !important; font-weight: 700 !important;
+      letter-spacing: .12em !important; color: rgba(108,114,147,.5) !important;
+      text-transform: uppercase !important; padding-top: 1.2rem !important;
+    }
+    .sidebar .nav .nav-item.profile { padding: .75rem .75rem .5rem !important; }
+    .sidebar .nav .nav-item.profile .profile-desc {
+      background: rgba(0,210,91,.05) !important;
+      border: 1px solid rgba(0,210,91,.12) !important;
+      border-radius: 10px !important; padding: .7rem .85rem !important;
+    }
+    .sidebar .nav .nav-item.profile .profile-name h5 { color: #e8eaed !important; font-weight: 700 !important; font-size: .92rem !important; }
+    .sidebar .nav .nav-item.profile .profile-name span { color: #00d25b !important; font-size: .65rem !important; font-weight: 700 !important; letter-spacing: .08em; }
+
+    /* ── Navbar top ── */
+    .navbar { background: #161827 !important; border-bottom: 1px solid rgba(255,255,255,.06) !important; box-shadow: 0 2px 20px rgba(0,0,0,.3) !important; }
+    .navbar .navbar-menu-wrapper { background: #161827 !important; border-left: 1px solid rgba(255,255,255,.06) !important; }
+    .navbar .navbar-brand-wrapper { background: #161827 !important; }
+    .navbar .navbar-profile-name { color: #e8eaed !important; font-weight: 600 !important; font-size: .88rem !important; }
+    .navbar .nav-link { color: #6c7293 !important; }
+    .navbar .nav-link:hover { color: #e8eaed !important; }
+
+    /* ── Dropdown perfil ── */
+    .navbar-dropdown.dropdown-menu {
+      background: #1e2130 !important;
+      border: 1px solid rgba(255,255,255,.09) !important;
+      border-radius: 12px !important;
+      box-shadow: 0 10px 40px rgba(0,0,0,.45) !important;
+    }
+    .navbar-dropdown h6 { color: #e8eaed !important; font-size: .78rem !important; font-weight: 700 !important; }
+    .navbar-dropdown .dropdown-divider { border-color: rgba(255,255,255,.07) !important; }
+    .navbar-dropdown .dropdown-item:hover { background: rgba(0,210,91,.07) !important; border-radius: 6px !important; }
+    .navbar-dropdown .preview-subject { color: #e8eaed !important; font-size: .88rem !important; }
+
+    /* ── Footer ── */
+    .footer { background: #161827 !important; border-top: 1px solid rgba(255,255,255,.06) !important; }
+    .footer .text-muted { color: rgba(108,114,147,.7) !important; font-size: .8rem !important; }
+    .footer .footer-credit a { color: rgba(108,114,147,.7) !important; transition: color .18s; }
+    .footer .footer-credit a:hover { color: #00d25b !important; }
   </style>
 </head>
 <body>
   <div class="container-scroller">
 
-    <!-- SIDEBAR (igual ao template, com toggle) -->
+    <!-- SIDEBAR -->
     <nav class="sidebar sidebar-offcanvas" id="sidebar">
       <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
         <a class="sidebar-brand brand-logo" href="painel.html">
@@ -168,7 +267,8 @@
           <div class="profile-desc">
             <div class="profile-pic">
               <div class="count-indicator">
-                <div class="img-xs rounded-circle d-flex align-items-center justify-content-center" style="background:#111111;color:#fff;font-weight:700;" id="avatarTop">--</div>
+                <div class="img-xs rounded-circle d-flex align-items-center justify-content-center"
+                     style="background:#111111;color:#fff;font-weight:700;" id="avatarTop">--</div>
                 <span class="count bg-success"></span>
               </div>
               <div class="profile-name">
@@ -179,9 +279,7 @@
           </div>
         </li>
 
-        <li class="nav-item nav-category">
-          <span class="nav-link">Menu</span>
-        </li>
+        <li class="nav-item nav-category"><span class="nav-link">Menu</span></li>
         <li class="nav-item menu-items active">
           <a class="nav-link" href="painel.html">
             <span class="menu-icon"><i class="mdi mdi-speedometer"></i></span>
@@ -194,50 +292,46 @@
             <span class="menu-title">Plataformas</span>
           </a>
         </li>
-
-
         <li class="nav-item menu-items" id="navSaque">
           <a class="nav-link" href="saque.html">
             <span class="menu-icon"><i class="mdi mdi-cash-multiple"></i></span>
             <span class="menu-title">Saque</span>
           </a>
         </li>
-
-        <!-- Owner only (mostra quando estiver em modo afiliado) -->
         <li class="nav-item menu-items" id="navBackToAdmin" style="display:none;">
           <a class="nav-link" href="painel-admin.html">
             <span class="menu-icon"><i class="mdi mdi-shield-account"></i></span>
             <span class="menu-title">Voltar ao Admin</span>
           </a>
         </li>
-
       </ul>
     </nav>
 
     <!-- MAIN -->
     <div class="container-fluid page-body-wrapper">
 
-      <!-- TOP NAV (toggle + perfil) -->
+      <!-- TOP NAV -->
       <nav class="navbar p-0 fixed-top d-flex flex-row">
         <div class="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
-          <a class="navbar-brand brand-logo-mini" href="painel.html"><img src="assets/afnex/imagens/logo.png" alt="Afiliados Bet" /></a>
+          <a class="navbar-brand brand-logo-mini" href="painel.html">
+            <img src="assets/afnex/imagens/logo.png" alt="Afiliados Bet" />
+          </a>
         </div>
         <div class="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
           <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
             <span class="mdi mdi-menu"></span>
           </button>
-
           <ul class="navbar-nav navbar-nav-right">
             <li class="nav-item">
               <a id="btnHelp" class="nav-link" href="#" target="_blank" rel="noopener noreferrer" title="Suporte">
                 <i class="mdi mdi-headset"></i>
               </a>
             </li>
-
             <li class="nav-item dropdown">
               <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
                 <div class="navbar-profile">
-                  <div class="img-xs rounded-circle d-flex align-items-center justify-content-center" style="background:#111111;color:#fff;font-weight:700;" id="avatarDrop">--</div>
+                  <div class="img-xs rounded-circle d-flex align-items-center justify-content-center"
+                       style="background:#111111;color:#fff;font-weight:700;" id="avatarDrop">--</div>
                   <p class="mb-0 d-none d-sm-block navbar-profile-name" id="dropNome">Afiliado</p>
                   <i class="mdi mdi-menu-down d-none d-sm-block"></i>
                 </div>
@@ -245,7 +339,7 @@
               <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="profileDropdown">
                 <h6 class="p-3 mb-0">Conta</h6>
                 <div class="dropdown-divider"></div>
-                <div class="px-3 pb-2 text-muted" style="font-size:.85rem;" id="dropEmail"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="26434b474f4a66435e434b564a490845494b">[email&#160;protected]</a></div>
+                <div class="px-3 pb-2 text-muted" style="font-size:.85rem;" id="dropEmail"></div>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item preview-item" href="#" id="btnLogoutTop">
                   <div class="preview-thumbnail">
@@ -253,9 +347,7 @@
                       <i class="mdi mdi-logout text-danger"></i>
                     </div>
                   </div>
-                  <div class="preview-item-content">
-                    <p class="preview-subject mb-1">Sair</p>
-                  </div>
+                  <div class="preview-item-content"><p class="preview-subject mb-1">Sair</p></div>
                 </a>
               </div>
             </li>
@@ -269,18 +361,20 @@
       <div class="main-panel">
         <div class="content-wrapper">
 
-          <!-- Linha 1: Comissões -->
+          <!-- ── Linha 1: Comissões ── -->
           <div class="row">
             <div class="col-12 grid-margin">
-              <div class="card card--commission">
+              <div class="card" style="border-top: 2px solid rgba(0,210,91,.5) !important;">
                 <div class="card-body">
-                  <div class="d-flex flex-wrap align-items-center justify-content-between">
+
+                  <!-- Cabeçalho: título + seletor de casa + badges -->
+                  <div class="d-flex flex-wrap align-items-center justify-content-between mb-3" style="gap:.75rem;">
                     <h4 class="card-title mb-0">Comissões</h4>
-                    <div class="d-flex flex-wrap" style="gap:.5rem;">
+                    <div class="d-flex flex-wrap align-items-center" style="gap:.55rem;">
                       <div class="ab-house-selector">
                         <div class="ab-house-selector-label"><i class="mdi mdi-home-variant"></i> Casa</div>
                         <select class="ab-house-select" id="dashHouseSelect">
-                          <option value="">Carregando casas...</option>
+                          <option value="">Carregando...</option>
                         </select>
                       </div>
                       <span class="badge badge-kpi badge-kpi--cpa" id="badgeCPA">CPA: -</span>
@@ -288,57 +382,60 @@
                     </div>
                   </div>
 
-                  <div class="row mt-4">
-                    <div class="col-md-3 mb-3 mb-md-0">
-                      <div class="ab-metric d-flex align-items-center">
-                        <div class="ab-metric-icon"><i class="mdi mdi-cash-multiple text-success"></i></div>
-                        <div class="ab-metric-text">
-                          <div class="text-muted">Disponível</div>
-                          <div class="h4 mb-0" id="cAvailable">R$ 0,00</div>
+                  <!-- 4 KPI cards de comissão -->
+                  <div class="row g-3">
+                    <div class="col-6 col-md-3">
+                      <div class="kpi-comm kpi-comm--green">
+                        <div class="kpi-comm-icon"><i class="mdi mdi-cash-multiple"></i></div>
+                        <div>
+                          <div class="kpi-comm-val" id="cAvailable">R$ 0,00</div>
+                          <div class="kpi-comm-lbl">Disponível</div>
                         </div>
                       </div>
                     </div>
-                    <div class="col-md-3 mb-3 mb-md-0">
-                      <div class="ab-metric d-flex align-items-center">
-                        <div class="ab-metric-icon"><i class="mdi mdi-clock-outline text-warning"></i></div>
-                        <div class="ab-metric-text">
-                          <div class="text-muted">Solicitado</div>
-                          <div class="h4 mb-0" id="cRequested">R$ 0,00</div>
+                    <div class="col-6 col-md-3">
+                      <div class="kpi-comm kpi-comm--yellow">
+                        <div class="kpi-comm-icon"><i class="mdi mdi-clock-outline"></i></div>
+                        <div>
+                          <div class="kpi-comm-val" id="cRequested">R$ 0,00</div>
+                          <div class="kpi-comm-lbl">Solicitado</div>
                         </div>
                       </div>
                     </div>
-                    <div class="col-md-3 mb-3 mb-md-0">
-                      <div class="ab-metric d-flex align-items-center">
-                        <div class="ab-metric-icon"><i class="mdi mdi-check-decagram text-success"></i></div>
-                        <div class="ab-metric-text">
-                          <div class="text-muted">Pago</div>
-                          <div class="h4 mb-0" id="cPaid">R$ 0,00</div>
+                    <div class="col-6 col-md-3">
+                      <div class="kpi-comm kpi-comm--blue">
+                        <div class="kpi-comm-icon"><i class="mdi mdi-check-decagram"></i></div>
+                        <div>
+                          <div class="kpi-comm-val" id="cPaid">R$ 0,00</div>
+                          <div class="kpi-comm-lbl">Pago</div>
                         </div>
                       </div>
                     </div>
-                    <div class="col-md-3">
-                      <div class="ab-metric d-flex align-items-center">
-                        <div class="ab-metric-icon"><i class="mdi mdi-close-octagon text-danger"></i></div>
-                        <div class="ab-metric-text">
-                          <div class="text-muted">Recusado</div>
-                          <div class="h4 mb-0" id="cRefused">R$ 0,00</div>
+                    <div class="col-6 col-md-3">
+                      <div class="kpi-comm kpi-comm--red">
+                        <div class="kpi-comm-icon"><i class="mdi mdi-close-octagon"></i></div>
+                        <div>
+                          <div class="kpi-comm-val" id="cRefused">R$ 0,00</div>
+                          <div class="kpi-comm-lbl">Recusado</div>
                         </div>
                       </div>
                     </div>
                   </div>
 
+                  <!-- Link do afiliado + botão sair -->
                   <div class="row mt-4">
                     <div class="col-lg-8">
-                      <label class="text-muted">Seu link</label>
-                      <div class="input-group">
-                        <input id="affiliateLink" type="text" class="form-control link-input" placeholder="Seu link ainda não foi configurado" readonly />
+                      <label class="text-muted" style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;">Seu link</label>
+                      <div class="input-group mt-1">
+                        <input id="affiliateLink" type="text" class="form-control link-input"
+                               placeholder="Seu link ainda não foi configurado" readonly />
                         <div class="input-group-append">
-                          <button id="btnCopyLink" class="btn btn-primary btn-icon-text" type="button"><i class="mdi mdi-content-copy"></i>Copiar</button>
+                          <button id="btnCopyLink" class="btn btn-primary btn-icon-text" type="button">
+                            <i class="mdi mdi-content-copy"></i>Copiar
+                          </button>
                         </div>
                       </div>
                       <small class="text-muted" id="affiliateLinkHint"></small>
-
-                      <!-- Casas (múltiplas) -->
                       <div id="housesList" class="mt-3" style="display:none"></div>
                     </div>
                     <div class="col-lg-4 mt-3 mt-lg-0 d-flex align-items-end justify-content-lg-end">
@@ -353,34 +450,72 @@
             </div>
           </div>
 
-          <!-- Linha 2: Métricas do mês -->
+          <!-- ── Linha 2: Métricas do mês ── -->
           <div class="row">
             <div class="col-12 grid-margin">
               <div class="card">
                 <div class="card-body">
-                  <h4 class="card-title">Métricas do mês</h4>
-                  <div id="dashboardHouseTitle" class="text-muted" style="margin-top:-4px"></div>
-                  <div class="row">
-                    <div class="col-md-3 mb-3"><div class="d-flex justify-content-between"><span class="text-muted">Cadastros</span><span class="font-weight-bold" id="mSignups">0</span></div></div>
-                    <div class="col-md-3 mb-3"><div class="d-flex justify-content-between"><span class="text-muted">FTDs</span><span class="font-weight-bold" id="mFTDs">0</span></div></div>
-                    <div class="col-md-3 mb-3"><div class="d-flex justify-content-between"><span class="text-muted">QFTDs (CPA)</span><span class="font-weight-bold" id="mQFTDs">0</span></div></div>
-                    <div class="col-md-3 mb-3"><div class="d-flex justify-content-between"><span class="text-muted">CPA</span><span class="font-weight-bold" id="mCPA">R$ 0,00</span></div></div>
+                  <div class="d-flex align-items-center justify-content-between mb-1">
+                    <h4 class="card-title mb-0">Métricas do mês</h4>
+                    <div id="dashboardHouseTitle" class="text-muted" style="font-size:.8rem;"></div>
+                  </div>
+                  <div class="row g-3 mt-1">
+                    <div class="col-6 col-md-3">
+                      <div class="metric-card">
+                        <div class="metric-icon">
+                          <img src="assets/afnex/images/iconecadastro.png" alt="Cadastros"
+                               style="width:28px;height:28px;object-fit:contain;filter:brightness(0) saturate(100%) invert(53%) sepia(93%) saturate(551%) hue-rotate(108deg) brightness(97%);">
+                        </div>
+                        <div class="metric-value" id="mSignups">0</div>
+                        <div class="metric-label">Cadastros</div>
+                      </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                      <div class="metric-card">
+                        <div class="metric-icon">
+                          <img src="assets/afnex/images/iconeftd.png" alt="FTDs"
+                               style="width:28px;height:28px;object-fit:contain;filter:brightness(0) saturate(100%) invert(53%) sepia(93%) saturate(551%) hue-rotate(108deg) brightness(97%);">
+                        </div>
+                        <div class="metric-value" id="mFTDs">0</div>
+                        <div class="metric-label">FTDs</div>
+                      </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                      <div class="metric-card">
+                        <div class="metric-icon">
+                          <img src="assets/afnex/images/iconecpa.png" alt="QFTDs"
+                               style="width:28px;height:28px;object-fit:contain;filter:brightness(0) saturate(100%) invert(53%) sepia(93%) saturate(551%) hue-rotate(108deg) brightness(97%);">
+                        </div>
+                        <div class="metric-value" id="mQFTDs">0</div>
+                        <div class="metric-label">QFTDs (CPA)</div>
+                      </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                      <div class="metric-card">
+                        <div class="metric-icon">
+                          <img src="assets/afnex/images/iconedeposito.png" alt="Depósitos"
+                               style="width:28px;height:28px;object-fit:contain;filter:brightness(0) saturate(100%) invert(53%) sepia(93%) saturate(551%) hue-rotate(108deg) brightness(97%);">
+                        </div>
+                        <div class="metric-value" id="mDeposits">R$ 0,00</div>
+                        <div class="metric-label">Depósitos</div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Linha 3: Área chart (comparação mensal) -->
+          <!-- ── Linha 3: Gráfico ── -->
           <div class="row">
             <div class="col-12 grid-margin">
               <div class="card">
                 <div class="card-body">
                   <div class="d-flex flex-wrap align-items-center justify-content-between">
-                    <h4 class="card-title mb-0">Comparação mensal (Área)</h4>
-                    <div class="text-muted" style="font-size:.85rem;">Mês atual vs mês passado</div>
+                    <h4 class="card-title mb-0">Comparação mensal</h4>
+                    <span class="text-muted" style="font-size:.78rem;">Mês atual vs mês passado</span>
                   </div>
-                  <div style="height: 280px;" class="mt-3">
+                  <div style="height:280px;" class="mt-3">
                     <canvas id="monthlyChart"></canvas>
                   </div>
                 </div>
@@ -388,7 +523,7 @@
             </div>
           </div>
 
-          <!-- Linha 4: Tabelas -->
+          <!-- ── Linha 4: Tabelas ── -->
           <div class="row">
             <div class="col-lg-7 grid-margin stretch-card">
               <div class="card">
@@ -402,7 +537,7 @@
                           <th>Cadastros</th>
                           <th>FTDs</th>
                           <th>QFTDs</th>
-                          <th>CPA</th>
+                          <th>Depósitos</th>
                         </tr>
                       </thead>
                       <tbody></tbody>
@@ -441,7 +576,10 @@
           <div class="d-sm-flex justify-content-center justify-content-sm-between">
             <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Afiliados Bet</span>
             <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">© <span id="year"></span></span>
-            <span class="text-muted d-block text-center text-sm-left d-sm-inline-block footer-credit">Criado por <a class="text-muted" href="https://www.instagram.com/eltongarcia100?igsh=MTdxcjRsMXV2ZjduaQ%3D%3D&utm_source=qr" target="_blank" rel="noopener">@eltongarcia100</a></span>
+            <span class="text-muted d-block text-center text-sm-left d-sm-inline-block footer-credit">Criado por
+              <a class="text-muted" href="https://www.instagram.com/eltongarcia100?igsh=MTdxcjRsMXV2ZjduaQ%3D%3D&utm_source=qr"
+                 target="_blank" rel="noopener">@eltongarcia100</a>
+            </span>
           </div>
         </footer>
 
@@ -449,10 +587,12 @@
     </div>
   </div>
 
-  <!-- Corona JS -->
-   <script type="module" src="assets/js/app/painel.js"></script>
+  <script type="module" src="assets/js/app/painel.js"></script>
   <script src="assets/corona/vendors/js/vendor.bundle.base.js"></script>
   <script src="assets/corona/vendors/chart.js/Chart.min.js"></script>
   <script src="assets/corona/js/off-canvas.js"></script>
   <script src="assets/corona/js/misc.js"></script>
-  <script src="assets/js
+  <script src="assets/js/plugin/datatables/datatables.min.js"></script>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

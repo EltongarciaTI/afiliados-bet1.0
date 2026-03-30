@@ -997,6 +997,21 @@ section {
     object-fit: contain;
 }
 
+.premio-card-2 .premio-imagem-container,
+.premio-card-3 .premio-imagem-container,
+.premio-card-4 .premio-imagem-container {
+    min-height: 270px;
+    max-height: 320px;
+}
+
+.premio-card-2 .premio-imagem img,
+.premio-card-3 .premio-imagem img,
+.premio-card-4 .premio-imagem img {
+    max-width: 120%;
+    max-height: 120%;
+    transform: scale(1.15);
+}
+
 .premio-content {
     width: 100%;
     display: flex;
