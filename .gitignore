@@ -1,0 +1,25 @@
+# ── Credenciais e configurações privadas ──────────────────────────────────────
+assets/js/app/clienteSupabase.js
+
+# ── Arquivos SQL (estrutura do banco — não expor em repositório público) ───────
+*.sql
+
+# ── Variáveis de ambiente ──────────────────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+
+# ── Sistema ───────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Editores ──────────────────────────────────────────────────────────────────
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+
+# ── Logs ──────────────────────────────────────────────────────────────────────
+*.log
+npm-debug.log*
