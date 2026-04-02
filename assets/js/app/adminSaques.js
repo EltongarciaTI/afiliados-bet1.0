@@ -5,11 +5,6 @@ import { TELEGRAM_HELP_URL } from "./config.js";
 
 function qs(id) { return document.getElementById(id); }
 
-let _rowsCache = [];
-
-function isUuid(v){
-  return typeof v === "string" && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(v);
-}
 
 function showMsg(type, text) {
   const box = qs("adminMsg");
@@ -80,6 +75,11 @@ async function fetchPayouts() {
 }
 
 function render(rows) {
+  // Destrói DataTables ANTES de modificar o DOM
+  if (window.$ && $.fn.DataTable && $.fn.DataTable.isDataTable("#adminPayoutTable")) {
+    $("#adminPayoutTable").DataTable().destroy();
+  }
+
   const tbody = document.querySelector("#adminPayoutTable tbody");
   if (!tbody) return;
   tbody.innerHTML = "";
@@ -231,86 +231,6 @@ async function hardDeletePayout(id){
   if (de) throw de;
 }
 
-async function moveHouseBalances({ affiliate_id, house_id, amount, approved_amount }, toStatus){
-  // house_id é obrigatório para manter saldo por casa
-  if(!house_id) return;
-
-  // Pega saldos atuais
-  const { data: house, error: he } = await supabase
-    .from("affiliate_houses")
-    .select("id, commission_available, commission_requested, commission_paid, commission_refused")
-    .eq("id", house_id)
-    .eq("affiliate_id", affiliate_id)
-    .maybeSingle();
-  if(he) throw he;
-  if(!house) return;
-
-  const reqAmt = Math.max(0, num(amount));
-  const payAmt = Math.max(0, num(approved_amount || amount));
-
-  let available = num(house.commission_available);
-  let requested = num(house.commission_requested);
-  let paid = num(house.commission_paid);
-  let refused = num(house.commission_refused);
-
-  // regra:
-  // - ao solicitar, o afiliado já moveu available -> requested
-  // - ao marcar PAGO: requested diminui, paid aumenta; se aprovado < solicitado, devolve diferença para available
-  // - ao RECUSAR: requested diminui, devolve para available e acumula refused (histórico)
-  if(toStatus === "paid"){
-    requested = Math.max(0, requested - reqAmt);
-    paid = Math.max(0, paid + payAmt);
-    const diff = Math.max(0, reqAmt - payAmt);
-    if(diff > 0) available = Math.max(0, available + diff);
-  }
-
-  if(toStatus === "refused"){
-    requested = Math.max(0, requested - reqAmt);
-    available = Math.max(0, available + reqAmt);
-    refused = Math.max(0, refused + reqAmt);
-  }
-
-  const { error: ue } = await supabase
-    .from("affiliate_houses")
-    .update({
-      commission_available: available,
-      commission_requested: requested,
-      commission_paid: paid,
-      commission_refused: refused
-    })
-    .eq("id", house.id);
-  if(ue) throw ue;
-}
-
-// Fallback para IDs numéricos (estrutura antiga): não existe RPC atômico, então finaliza manualmente.
-// IMPORTANTE: precisa ficar no escopo global para o processStatusChange conseguir chamar.
-async function finalizePayoutManual(id, patch){
-  const payout = await getPayoutById(id);
-  if (!payout) throw new Error("Saque não encontrado.");
-
-  const newStatus = String(patch.status || "").toLowerCase();
-  const approvedAmount = (patch.approved_amount ?? payout.approved_amount ?? null);
-
-  // Atualiza payout
-  await updatePayout(id, {
-    status: newStatus,
-    approved_amount: approvedAmount,
-    admin_note: patch.admin_note ?? null,
-  });
-
-  // Ajusta saldos por casa quando for paid/refused (se existir house_id)
-  if (newStatus === "paid" || newStatus === "refused") {
-    await moveHouseBalances(
-      {
-        affiliate_id: payout.affiliate_id,
-        house_id: payout.house_id,
-        amount: payout.amount,
-        approved_amount: approvedAmount,
-      },
-      newStatus
-    );
-  }
-}
 
 async function processStatusChange(id, patch){
   const st = String(patch.status || "").toLowerCase();
@@ -371,7 +291,6 @@ async function init() {
   async function load() {
     showMsg("ok", "Carregando...");
     let rows = await fetchPayouts();
-     _rowsCache = rows;
 
     // Busca rápida (client-side) para ficar leve
     const term = String(qs("filterSearch")?.value || "").trim().toLowerCase();
