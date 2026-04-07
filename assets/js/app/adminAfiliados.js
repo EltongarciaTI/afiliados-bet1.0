@@ -46,6 +46,7 @@ function fmtModelo(m) {
 // Estado global
 // ─────────────────────────────────────────
 let _affiliates = [];
+let _housesMap = {};      // affiliate_id → [house_name, ...]
 let _currentAffiliateId = null;
 let _currentHouses = [];
 
@@ -77,38 +78,44 @@ async function loadAffiliates() {
   _affiliates = data || [];
 
   const ids = _affiliates.map(a => a.id);
-  let housesCounts = {};
+  _housesMap = {};
   if (ids.length > 0) {
     const { data: hData } = await supabase
       .from("affiliate_houses")
-      .select("affiliate_id")
+      .select("affiliate_id, house_name")
       .in("affiliate_id", ids);
     for (const h of hData || []) {
-      housesCounts[h.affiliate_id] = (housesCounts[h.affiliate_id] || 0) + 1;
+      if (!_housesMap[h.affiliate_id]) _housesMap[h.affiliate_id] = [];
+      _housesMap[h.affiliate_id].push(h.house_name || "—");
     }
   }
 
   updateKPIs(_affiliates);
-  renderTable(_affiliates, housesCounts);
+  renderTable(_affiliates, _housesMap);
 }
 
 // ─────────────────────────────────────────
 // Renderizar tabela
 // ─────────────────────────────────────────
-function renderTable(rows, housesCounts = {}) {
+function renderTable(rows, housesMap = {}) {
   const tbody = document.querySelector("#affiliatesTable tbody");
   if (!tbody) return;
   tbody.innerHTML = "";
 
   if (!rows.length) {
-    tbody.innerHTML = `<tr><td colspan="7" class="text-muted text-center py-4">Nenhum afiliado encontrado.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="6" class="text-muted text-center py-4">Nenhum afiliado encontrado.</td></tr>`;
     return;
   }
 
   for (const p of rows) {
     const initials = getInitials(p.full_name || p.name || p.email);
     const nome = p.full_name || p.name || "(sem nome)";
-    const casas = housesCounts[p.id] || 0;
+    const names = housesMap[p.id] || [];
+    const casasLabel = names.length === 0
+      ? "—"
+      : names.length <= 2
+        ? names.join(", ")
+        : names.slice(0, 2).join(", ") + ` +${names.length - 2}`;
 
     const tr = document.createElement("tr");
     tr.dataset.id = p.id;
@@ -123,9 +130,8 @@ function renderTable(rows, housesCounts = {}) {
         </div>
       </td>
       <td class="small">${p.whatsapp || "—"}</td>
-      <td class="small">${p.instagram ? "@" + String(p.instagram).replace(/^@/, "") : "—"}</td>
       <td>${fmtStatus(p.approval_status)}</td>
-      <td class="small">${casas} casa${casas !== 1 ? "s" : ""}</td>
+      <td class="small" title="${names.join(', ')}" style="max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${casasLabel}</td>
       <td class="small">${safeDate(p.created_at)}</td>
       <td>
         <div class="d-flex gap-1">
@@ -186,7 +192,7 @@ function applyFilter() {
     return matchQ && matchSt;
   });
 
-  renderTable(filtered);
+  renderTable(filtered, _housesMap);
   updateKPIs(filtered);
 }
 
